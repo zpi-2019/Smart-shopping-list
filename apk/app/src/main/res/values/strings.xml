@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Smart-shopping-list-app</string>
+    <string name="last_list">Ostatnia lista</string>
+    <string name="all_lists">Wszystkie listy</string>
+    <string name="Hello">Witaj</string>
+    <string name="title_activity_single_list">SingleList</string>
 </resources>

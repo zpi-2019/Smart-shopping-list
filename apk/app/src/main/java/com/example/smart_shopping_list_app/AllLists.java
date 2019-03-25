@@ -1,0 +1,13 @@
+package com.example.smart_shopping_list_app;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+public class AllLists extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_all_lists);
+    }
+}
