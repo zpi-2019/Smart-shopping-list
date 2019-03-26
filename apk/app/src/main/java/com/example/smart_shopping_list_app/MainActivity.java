@@ -30,14 +30,14 @@ public class MainActivity extends AppCompatActivity {
         btLastList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getBaseContext(), AllLists.class));
+                startActivity(new Intent(getBaseContext(), SingleList.class));
             }
         });
 
         btAllLists.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getBaseContext(), SingleList.class));
+                startActivity(new Intent(getBaseContext(), AllLists.class));
             }
         });
     }
