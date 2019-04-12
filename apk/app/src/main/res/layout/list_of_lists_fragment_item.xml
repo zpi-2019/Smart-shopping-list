@@ -23,15 +23,15 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content">
 
-        <ImageButton
-            android:id="@+id/button_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:padding="0dp"
-            android:scaleType="centerCrop"
-            android:layout_gravity="start"
-            app:srcCompat="@drawable/delete_button"
-            tools:ignore="ContentDescription" />
+            <ImageButton
+                android:id="@+id/button_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="0dp"
+                android:scaleType="centerCrop"
+                android:layout_gravity="start"
+                app:srcCompat="@drawable/delete_button"
+                tools:ignore="ContentDescription" />
         </FrameLayout>
 
         <android.support.constraint.ConstraintLayout
@@ -60,6 +60,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/list_title"
                 app:layout_constraintBottom_toBottomOf="parent"
                 tools:layout_editor_absoluteY="8dp" />
-</android.support.constraint.ConstraintLayout>
+        </android.support.constraint.ConstraintLayout>
     </com.chauthai.swipereveallayout.SwipeRevealLayout>
 </android.support.v7.widget.CardView>

@@ -11,20 +11,37 @@ import android.widget.TextView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
+import com.example.smart_shopping_list_app.ListOfListsFragment.OnListFragmentInteractionListener;
+import com.example.smart_shopping_list_app.dummy.DummyContent.DummyItem;
 
-public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.MyViewHolder> {
+import java.util.List;
+
+/**
+ * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * specified {@link OnListFragmentInteractionListener}.
+ * TODO: Replace the implementation with code for your data type.
+ */
+public class MyListRecyclerViewAdapter extends RecyclerView.Adapter<MyListRecyclerViewAdapter.ViewHolder> {
+
+    private final List<DummyItem> mValues;
+    private final OnListFragmentInteractionListener mListener;
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
+
+    MyListRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+        mValues = items;
+        mListener = listener;
+    }
 
     @NonNull
     @Override
-    public ListOfListsAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_of_lists_item, parent, false);
-        return new MyViewHolder(view);
+                .inflate(R.layout.list_of_lists_fragment_item, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ListOfListsAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         viewBinderHelper.bind(holder.swipeRevealLayout, String.valueOf(position));
         holder.tvListTitle.setText("Nowa lista" + position);
         holder.tvCounter.setText("0/24");
@@ -38,16 +55,17 @@ public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.
 
     @Override
     public int getItemCount() {
-        return 5;
+        return mValues.size();
     }
 
-    static class MyViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         SwipeRevealLayout swipeRevealLayout;
         TextView tvListTitle;
         TextView tvCounter;
         ImageButton btDelete;
-        MyViewHolder(View itemView) {
-            super(itemView);
+
+        ViewHolder(View view) {
+            super(view);
             tvListTitle = itemView.findViewById(R.id.list_title);
             tvCounter = itemView.findViewById(R.id.counter);
             swipeRevealLayout = itemView.findViewById(R.id.swipe_layout_2);
@@ -61,5 +79,4 @@ public class ListOfListsAdapter extends RecyclerView.Adapter<ListOfListsAdapter.
 
     void restoreStates(Bundle inState) {
         viewBinderHelper.restoreStates(inState);
-    }
-}
+    }}

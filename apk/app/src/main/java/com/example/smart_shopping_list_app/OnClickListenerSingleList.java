@@ -3,12 +3,12 @@ package com.example.smart_shopping_list_app;
 import android.view.View;
 
 public class OnClickListenerSingleList implements View.OnClickListener {
-    private BasicListAdapter.MyViewHolder holder;
+    private MyItemRecyclerViewAdapter.ViewHolder holder;
     private String text;
     private int color;
     private boolean isUndo;
 
-    OnClickListenerSingleList(BasicListAdapter.MyViewHolder holder, String text, int color, boolean isUndo) {
+    OnClickListenerSingleList(MyItemRecyclerViewAdapter.ViewHolder holder, String text, int color, boolean isUndo) {
         this.holder = holder;
         this.text = text;
         this.color = color;
