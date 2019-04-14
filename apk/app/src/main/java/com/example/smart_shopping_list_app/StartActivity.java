@@ -1,5 +1,6 @@
 package com.example.smart_shopping_list_app;
 
+import android.arch.persistence.room.Room;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -9,17 +10,22 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.smart_shopping_list_app.LocalDatabase.AppDatabase;
 import com.example.smart_shopping_list_app.dummy.DummyContent;
 
 public class StartActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SingleListFragment.OnListFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, ListOfListsFragment.OnListFragmentInteractionListener, SingleListFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+          //      AppDatabase.class, "database-name").build();
+
         setContentView(R.layout.activity_start);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
