@@ -8,6 +8,7 @@ from math import log
 from matplotlib import pyplot as plt
 from scipy import sparse
 from sklearn.decomposition import PCA
+from scipy.spatial.distance import pdist, squareform
 
 logger = logging.getLogger("glove")
 
@@ -347,6 +348,10 @@ if __name__ == '__main__':
 
     W = train_glove(vocabulary, cooccur, vector_size=10, iterations=2000, learning_rate=0.001, x_max=100, alpha=0.75)
     W_merged = merge_main_context(W)
+
+    # Distance vector and matrix
+    distances = pdist(W_merged)
+    dist_matrix = squareform(distances)
 
     # Visualization
     pca = PCA(n_components=2)
