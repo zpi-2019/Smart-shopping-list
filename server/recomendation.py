@@ -41,7 +41,10 @@ class Recommender:
         :param data_source: DB manager or raw list with data
         :param name: Name of the model, if None model creation date will be assigned
         """
-        data = data_source  # TODO get form db
+        if isinstance(data_source, list):
+            data = data_source
+        else:
+            pass  # TODO get form db
 
         self._glove = GloVe(data,
                             learning_rate=LEARNING_RATE,
