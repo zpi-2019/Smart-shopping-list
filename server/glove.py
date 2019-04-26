@@ -29,9 +29,9 @@ class GloVe:
         self.id2word = None
 
     def setup(self):
-        self._setup_logger()
-        self._build_vocab()
-        self._build_id2word()
+        self.setup_logger()
+        self.build_vocab()
+        self.build_id2word()
 
     def fit(self):
         space = self._train()
@@ -39,18 +39,20 @@ class GloVe:
 
         return merged_space
 
-    def _setup_logger(self):
+    def setup_logger(self, name_='GloVe'):
         # TODO redirect to file
-        self._logger = logging.getLogger('GloVe')
+        self._logger = logging.getLogger(name_)
 
         stream_logger = logging.StreamHandler()
         stream_logger.setLevel(self._logging_level)
 
         self._logger.addHandler(stream_logger)
 
-    def _build_vocab(self):
+    def build_vocab(self, top=None):
         """
         Build a vocabulary with word frequencies for an entire corpus.
+
+        :param top: If not None, only first <top> words, base on frequency, will be preserved
 
         Returns a dictionary `w -> (i, f)`, mapping word strings to pairs of
         word ID and word corpus frequency.
@@ -64,9 +66,14 @@ class GloVe:
 
         self._logger.info("Done building vocab from corpus.")
 
-        self._vocabulary = {word: (i, freq) for i, (word, freq) in enumerate(vocab.items())}
+        if top is not None and top < len(vocab):
+            words = sorted(vocab.items(), key=lambda x: -x[1])[:top]
+        else:
+            words = vocab.items()
 
-    def _build_id2word(self):
+        self._vocabulary = {word: (i, freq) for i, (word, freq) in enumerate(words)}
+
+    def build_id2word(self):
         self.id2word = dict((id_, word) for word, (id_, _) in self._vocabulary.items())
 
     def _build_cooccur(self):
@@ -98,7 +105,7 @@ class GloVe:
             if i % 1000 == 0:
                 self._logger.info("Building cooccurrence matrix: on line %i", i)
 
-            token_ids = [self._vocabulary[word][0] for word in list_]
+            token_ids = [self._vocabulary[word][0] for word in list_ if word in self._vocabulary]
 
             for center_i, center_id in enumerate(token_ids):
                 # Collect all word IDs in left window of center word
