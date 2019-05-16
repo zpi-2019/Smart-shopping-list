@@ -7,7 +7,7 @@ from os import environ
 app = Flask("It's alive!")
 api = Api(app)
 # app.config["MONGO_URI"] = "mongodb://localhost:27017/ShoppingListDb"
-app.config["MONGO_URI"] = environ['MONGODB_CONNECTION_URL']
+app.config["MONGO_URI"] = environ.get('MONGODB_CONNECTION_URL', None)
 mongo = PyMongo(app)
 
 parser = reqparse.RequestParser()
