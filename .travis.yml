@@ -10,6 +10,8 @@ before_script:
 - cd server
 script:
 - python -m unittest discover
+before_deploy:
+- cd server
 deploy:
   provider: heroku
   app: smart-shopping-list-pwr-api
