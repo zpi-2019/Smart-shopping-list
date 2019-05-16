@@ -2,11 +2,9 @@ matrix:
     include:
         - dist: xenial
           language: python
-          python: 3.7
-          before_intall:
-            - cd server
+          python: 3.7.3
           install:
-            - pip install -r requirements.txt
+            - pip install -r server/requirements.txt
           before_script:
             - cd server
           script:
