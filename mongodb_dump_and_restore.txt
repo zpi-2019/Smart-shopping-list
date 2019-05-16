@@ -1,0 +1,15 @@
+Complete info:
+https://docs.mongodb.com/manual/tutorial/backup-and-restore-tools/
+
+Short version, assumes localhost and default port:
+In cmd, navigate to mongodb server installation folder (e.g. "C:\Program Files\MongoDB\Server\4.0\bin")
+
+To dump database:
+mongodump --db <database name> --out <path>
+
+e.g. "mongodump --db ShoppingListDb --out dump_23_04"
+
+To restore databse:
+mongorestore <path>
+
+e.g. "mongorestore dump_24_04"
