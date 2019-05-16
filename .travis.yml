@@ -1,0 +1,20 @@
+matrix:
+  include:
+  - dist: xenial
+    branches:
+      only:
+      - server
+    language: python
+    python: 3.7.3
+    install:
+    - pip install -r server/requirements.txt
+    before_script:
+    - cd server
+    script:
+    - python -m unittest discover
+    deploy:
+      provider: heroku
+      secure: cXpU/k435RUr/gthGTEkSCD/zHphLC/Cf9nSA6hohoTbBZNysj8f0TDGWv4TRe7zfX+T6H6fJgfwgvCnX5HHLlLtXXUp1gp0+Odkvk+6alnaz4oXvjrttLfkFw/qjfVvw1P1YIxwyi428I5uFsb0UF/cCNmOe+a0EG/eXFI6Tq30Vm77N5MShJ+T64VZsvy85vHZ4EYEK41QCLlE9nlgvR+mbIjMCAMR7j4fjWHtvaF/UJMjvfmIXGl4+lE80kz0DwVUmTl5MLGpi3lmjtghVcnemukfJTtldrjcWHOMHCS/8+NYA/MFIV4mWnT/k9EhMQhzC4d1dEgBsZx/8xqA9AZtyLRKMtuqGHxdZwXVsSYyHIQWNgZBfEtYMlzpYk9KtQVL+9biODJ1yF/rM10xfGmjKJXufWKyVlO+lJbWfXKjh13JfdW3lDDQajAv4z/JpXFDRxDeMcrOkjdkI3LivgJqImV0c/nTS9wbDqMiYcq6xhIl4O1upB5euk7cWvI0dRelX83Quxx0jIP9QJJ9c7kEQVq++GLMpJaLrXLTwxhlorrkEIrD6BuRFhWcn+RM4IQwdBU3sFkOfXc/h9yDNandemqsUluCcBb0GUpUJuCBEfMIWER98esjbQd70PKtO3G0oNH4Z8Wx0rUvl965GjvUH/5JTBFiPqbhYfQWbgs=
+      app: smart-shopping-list-pwr-api
+      on:
+          repo: zpi-2019/Smart-shopping-list
