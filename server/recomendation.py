@@ -13,7 +13,7 @@ ITERATIONS = 25
 
 class Recommender:
     """
-    Recommender used for training GloVe models on shipping lists
+    Recommender used for training GloVe models on shopping lists
 
 
     Attributes:
@@ -70,7 +70,27 @@ class Recommender:
 
     def update_distances(self):
         """
-        Push distance vector from buffer into distance attribute. Buffer is set to None after this operation.
+        Push reformatted distance vector from buffer into distance attribute. Buffer is set to None after this
+        operation.
         """
-        self.distance = self._distance_buffer
+        self.distance = self._reformat_vector(self._distance_buffer)
         self._distance_buffer = None
+
+    def _reformat_vector(self, vector):
+        """
+        Reformat distance vector into product : distances dictionary
+        """
+        formatted = {}
+        id2word = self._glove.id2word
+        hi = 0
+
+        for i in range(self._product_num):
+            name = id2word[i]
+
+            lo = hi
+            hi = lo + self._product_num - (i + 1)
+            dists = vector[lo:hi]
+
+            formatted[name] = dists
+
+        return formatted
