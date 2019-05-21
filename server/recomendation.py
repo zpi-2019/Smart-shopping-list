@@ -60,11 +60,27 @@ class Recommender:
             name = datetime.now().strftime('GloVe[%Y-%m-%d]')
         self._glove.setup_logger(name)
 
-    def sync_version_with_db(self):
+    def sync_with_db(self, db):
         """
-        Synchronize model version with last saved in db
+        Synchronize model and version with last saved in db
         """
-        pass
+        cursor = db.models.find({}, {'_id': 0}).sort('version', -1).limit(1)
+        if cursor.count():
+            model = cursor.next()
+
+            self.version = model['version']
+            self.distance = model['model']
+
+    def save_to_db(self, db):
+        """
+        Save current model into db
+        """
+        model = {
+            'version': self.version,
+            'model': self.distance
+        }
+
+        db.models.insert(model)
 
     def train_model(self):
         """

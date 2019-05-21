@@ -14,9 +14,7 @@ api = Api(app)
 
 # Test model
 rec = Recommender(6)
-rec.create_test_model()
-rec.train_model()
-rec.update_distances()
+rec.sync_with_db(mongo.db)
 
 parser = reqparse.RequestParser()
 parser.add_argument('products', action='append')
