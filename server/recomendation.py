@@ -34,6 +34,7 @@ class Recommender:
         self._glove = None
         self.distance = None
         self._distance_buffer = None
+        self.version = 1
 
     def create_new_model(self, data_source, name=None):
         """
@@ -59,6 +60,12 @@ class Recommender:
             name = datetime.now().strftime('GloVe[%Y-%m-%d]')
         self._glove.setup_logger(name)
 
+    def sync_version_with_db(self):
+        """
+        Synchronize model version with last saved in db
+        """
+        pass
+
     def train_model(self):
         """
         Train currently loaded model and create distance vector. New distance vector is saved into buffer.
@@ -75,6 +82,7 @@ class Recommender:
         operation.
         """
         self.distance = self._reformat_vector(self._distance_buffer)
+        self.version += 1
         self._distance_buffer = None
 
     def _reformat_vector(self, vector):

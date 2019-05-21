@@ -1,16 +1,16 @@
-from flask import Flask, jsonify, request, redirect, url_for
-from flask_restful import Resource, Api, reqparse
-from flask_pymongo import PyMongo
-from bson.json_util import dumps
 from os import environ
+
+from bson.json_util import dumps
+from flask import Flask, redirect, url_for
+from flask_pymongo import PyMongo
+from flask_restful import Resource, Api, reqparse
+
 from recomendation import Recommender
 
 app = Flask("ShoppingListApi")
+app.config["MONGO_URI"] = environ.get('MONGODB_CONNECTION_URL', None)  # "mongodb://localhost:27017/ShoppingListDb"
+mongo = PyMongo(app)
 api = Api(app)
-# app.config["MONGO_URI"] = "mongodb://localhost:27017/ShoppingListDb"
-
-# app.config["MONGO_URI"] = environ.get('MONGODB_CONNECTION_URL', None)
-# mongo = PyMongo(app)
 
 # Test model
 rec = Recommender(6)
@@ -28,7 +28,13 @@ class Dists(Resource):
         return rec.distance
 
 
+class Version(Resource):
+    def get(self):
+        return rec.version
+
+
 api.add_resource(Dists, '/model/')
+api.add_resource(Version, '/model/version')
 
 
 # class ShoppingList(Resource):
