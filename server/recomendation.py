@@ -1,4 +1,5 @@
 from datetime import datetime
+from random import shuffle
 
 from scipy.spatial.distance import pdist
 
@@ -91,6 +92,51 @@ class Recommender:
             hi = lo + self._product_num - (i + 1)
             dists = vector[lo:hi]
 
-            formatted[name] = dists
+            formatted[name] = list(dists)
 
         return formatted
+
+    def create_test_model(self):
+        """
+        Create test model
+        """
+        data = [
+            ['owoce', 'szynka'],
+            ['owoce', 'szynka'],
+            ['owoce', 'szynka'],
+            ['owoce', 'szynka'],
+            ['owoce', 'szynka'],
+            ['owoce', 'szynka'],
+            ['owoce', 'szynka'],
+            ['owoce', 'szynka'],
+            ['woda', 'chleb'],
+            ['woda', 'chleb'],
+            ['woda', 'chleb'],
+            ['woda', 'chleb'],
+            ['woda', 'chleb'],
+            ['woda', 'chleb'],
+            ['woda', 'chleb'],
+            ['woda', 'chleb'],
+            ['kawa', 'ciastka'],
+            ['kawa', 'ciastka'],
+            ['kawa', 'ciastka'],
+            ['kawa', 'ciastka'],
+            ['kawa', 'ciastka'],
+            ['kawa', 'ciastka'],
+            ['kawa', 'ciastka'],
+            ['kawa', 'ciastka'],
+            ['szynka', 'woda'],
+            ['szynka', 'woda'],
+            ['szynka', 'woda'],
+            ['szynka', 'woda'],
+            ['szynka', 'woda'],
+            ['szynka', 'woda'],
+            ['szynka', 'woda'],
+            ['szynka', 'woda'],
+            ['szynka', 'woda'],
+            ['szynka', 'woda'],
+            ['szynka', 'woda'],
+            ['szynka', 'woda'],
+        ]
+        shuffle(data)
+        self.create_new_model(data)
