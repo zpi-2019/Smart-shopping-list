@@ -9,7 +9,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.Query;
 import java.util.List;
 
-//TODO: Add converter from date to long and from long to date, Create Indexes
+//TODO: Add converter from date to long and from long to date
 
 
 @Entity
@@ -232,4 +232,31 @@ class ListItem {
 interface ListItemDao {
     @Query("SELECT * FROM ListItem")
     List<ListItem> getAllListItems();
+}
+
+@Entity(primaryKeys = {"IDProduct1", "IDProduct2"},
+        foreignKeys = {
+            @ForeignKey(entity = Product.class,
+                    parentColumns = "IDProduct",
+                    childColumns = "IDProduct1"
+            ),
+            @ForeignKey(entity = Product.class,
+                    parentColumns = "IDProduct",
+                    childColumns = "IDProduct2")
+        },
+        indices = {@Index("IDProduct1"), @Index("IDProduct2")})
+class Distance {
+    @ColumnInfo(name = "IDProduct1")
+    int IDProduct1;
+
+    @ColumnInfo(name = "IDProduct2")
+    int IDProduct2;
+
+    int Distance;
+}
+
+@Dao
+interface DistanceDao {
+    @Query("SELECT * FROM Distance")
+    List<Distance> getAllDistances();
 }

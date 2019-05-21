@@ -13,4 +13,9 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="all_shopping_lists">All shopping lists</string>
+    <string name="create_new_shopping_list">Create new shopping list</string>
+    <string name="add_new_group">Add new group</string>
+    <string name="settings">Settings</string>
+    <string name="last_used_list">Last used list</string>
 </resources>
