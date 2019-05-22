@@ -4,13 +4,8 @@ from random import shuffle
 from apscheduler.schedulers.background import BackgroundScheduler
 from scipy.spatial.distance import pdist
 
+import config as cfg
 from glove import GloVe
-
-LEARNING_RATE = 0.05
-X_MAX = 100
-ALPHA = 0.75
-V_SIZE = 100
-ITERATIONS = 25
 
 
 class Recommender:
@@ -35,7 +30,7 @@ class Recommender:
         self._glove = None
         self.distance = None
         self._distance_buffer = None
-        self.version = 1
+        self.version = cfg.model['def_version']
         self.scheduler = None
 
     def create_new_model(self, data_source, name=None):
@@ -51,11 +46,11 @@ class Recommender:
             pass  # TODO get form db
 
         self._glove = GloVe(data,
-                            learning_rate=LEARNING_RATE,
-                            x_max=X_MAX,
-                            alpha=ALPHA,
-                            vector_size=V_SIZE,
-                            iterations=ITERATIONS,
+                            learning_rate=cfg.model['learning_rate'],
+                            x_max=cfg.model['x_max'],
+                            alpha=cfg.model['alpha'],
+                            vector_size=cfg.model['v_size'],
+                            iterations=cfg.model['iterations'],
                             )
 
         if name is None:
@@ -105,7 +100,8 @@ class Recommender:
 
     def start_training_cycle(self, db):
         self.scheduler = BackgroundScheduler()
-        self.scheduler.add_job(self._training_job, 'cron', day_of_week='mon', hour=1, args=[db])
+        self.scheduler.add_job(self._training_job, 'cron', day_of_week=cfg.model['train_week_day'],
+                               hour=cfg.model['train_hour'], args=[db])
         self.scheduler.start()
 
     def _training_job(self, db):

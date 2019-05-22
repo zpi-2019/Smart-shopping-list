@@ -1,9 +1,9 @@
 import logging
 from collections import Counter
-from math import log
 from random import shuffle
 
 import numpy as np
+from math import log
 from matplotlib import pyplot as plt
 from scipy import sparse
 from scipy.spatial.distance import pdist
