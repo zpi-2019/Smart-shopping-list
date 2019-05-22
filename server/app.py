@@ -21,13 +21,13 @@ class RESTApp(Flask):
         self._api = Api(self)
 
     def _setup_db(self):
-        self.config["MONGO_URI"] = environ.get('MONGODB_CONNECTION_URL', None)  # TODO
+        self.config["MONGO_URI"] = environ.get('MONGODB_CONNECTION_URL', None)
         self._db = PyMongo(self).db
 
     def _setup_recommendations(self):
         self.recommender = Recommender(6)
         self.recommender.sync_with_db(self._db)
-        # TODO
+        # self.recommender.start_training_cycle(self._db)
 
     def _setup_endpoints(self):
         self._api.add_resource(Dists, '/model/', resource_class_kwargs={'rec': self.recommender})
@@ -42,6 +42,7 @@ class RESTApp(Flask):
 
 app = RESTApp("ShoppingListApi")
 app.setup()
+
 
 # "mongodb://localhost:27017/ShoppingListDb"
 # parser = reqparse.RequestParser()

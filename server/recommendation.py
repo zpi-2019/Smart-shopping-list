@@ -1,6 +1,7 @@
 from datetime import datetime
 from random import shuffle
 
+from apscheduler.schedulers.background import BackgroundScheduler
 from scipy.spatial.distance import pdist
 
 from glove import GloVe
@@ -35,6 +36,7 @@ class Recommender:
         self.distance = None
         self._distance_buffer = None
         self.version = 1
+        self.scheduler = None
 
     def create_new_model(self, data_source, name=None):
         """
@@ -100,6 +102,17 @@ class Recommender:
         self.distance = self._reformat_vector(self._distance_buffer)
         self.version += 1
         self._distance_buffer = None
+
+    def start_training_cycle(self, db):
+        self.scheduler = BackgroundScheduler()
+        self.scheduler.add_job(self._training_job, 'cron', day_of_week='mon', hour=1, args=[db])
+        self.scheduler.start()
+
+    def _training_job(self, db):
+        self.create_new_model(db)
+        self.train_model()
+        self.update_distances()
+        self.save_to_db(db)
 
     def _reformat_vector(self, vector):
         """
