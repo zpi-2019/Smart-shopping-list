@@ -3,38 +3,52 @@ from os import environ
 from bson.json_util import dumps
 from flask import Flask, redirect, url_for
 from flask_pymongo import PyMongo
-from flask_restful import Resource, Api, reqparse
+from flask_restful import Api, reqparse
 
-from recomendation import Recommender
-
-app = Flask("ShoppingListApi")
-app.config["MONGO_URI"] = environ.get('MONGODB_CONNECTION_URL', None)  # "mongodb://localhost:27017/ShoppingListDb"
-mongo = PyMongo(app)
-api = Api(app)
-
-# Test model
-rec = Recommender(6)
-rec.sync_with_db(mongo.db)
-
-parser = reqparse.RequestParser()
-parser.add_argument('products', action='append')
-parser.add_argument('userID', type=int)
+from endpoints import Dists, Version
+from recommendation import Recommender
 
 
-class Dists(Resource):
-    def get(self):
-        return rec.distance
+class RESTApp(Flask):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self._api = None
+        self._db = None
+        self.recommender = None
+
+    def _setup_rest_api(self):
+        self._api = Api(self)
+
+    def _setup_db(self):
+        self.config["MONGO_URI"] = environ.get('MONGODB_CONNECTION_URL', None)  # TODO
+        self._db = PyMongo(self).db
+
+    def _setup_recommendations(self):
+        self.recommender = Recommender(6)
+        self.recommender.sync_with_db(self._db)
+        # TODO
+
+    def _setup_endpoints(self):
+        self._api.add_resource(Dists, '/model/', resource_class_kwargs={'rec': self.recommender})
+        self._api.add_resource(Version, '/model/version', resource_class_kwargs={'rec': self.recommender})
+
+    def setup(self):
+        self._setup_db()
+        self._setup_rest_api()
+        self._setup_recommendations()
+        self._setup_endpoints()
 
 
-class Version(Resource):
-    def get(self):
-        return rec.version
+app = RESTApp("ShoppingListApi")
+app.setup()
 
-
-api.add_resource(Dists, '/model/')
-api.add_resource(Version, '/model/version')
-
-
+# "mongodb://localhost:27017/ShoppingListDb"
+# parser = reqparse.RequestParser()
+# parser.add_argument('products', action='append')
+# parser.add_argument('userID', type=int)
+#
+#
 # class ShoppingList(Resource):
 #     def get(self, userID=None):
 #         if userID:
@@ -61,7 +75,7 @@ api.add_resource(Version, '/model/version')
 # api.add_resource(ShoppingList, '/shopping_lists/<int:userID>/', endpoint='userID')
 
 
-@app.route('/')
+@RESTApp.route(app, '/')
 def hello_world():
     return 'Greetings'
 

@@ -1,4 +1,4 @@
-from recomendation import Recommender
+from recommendation import Recommender
 from scipy.spatial.distance import pdist
 import numpy as np
 from unittest import TestCase
