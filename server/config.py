@@ -12,7 +12,8 @@ app = {
 
 endpoints = {
     'model': '/model/',
-    'version': '/model/version'
+    'version': '/model/version',
+    'list': '/lists/'
 }
 
 model = {

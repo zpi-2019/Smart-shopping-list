@@ -1,10 +1,9 @@
-from bson.json_util import dumps
-from flask import Flask, redirect, url_for
+from flask import Flask
 from flask_pymongo import PyMongo
-from flask_restful import Api, reqparse
+from flask_restful import Api
 
 import config as cfg
-from endpoints import Dists, Version
+from endpoints import Dists, Version, ShoppingList
 from recommendation import Recommender
 
 
@@ -31,6 +30,7 @@ class RESTApp(Flask):
     def _setup_endpoints(self):
         self._api.add_resource(Dists, cfg.endpoints['model'], resource_class_kwargs={'rec': self.recommender})
         self._api.add_resource(Version, cfg.endpoints['version'], resource_class_kwargs={'rec': self.recommender})
+        self._api.add_resource(ShoppingList, cfg.endpoints['list'], resource_class_kwargs={'db': self._db})
 
     def setup(self):
         self._setup_db()
@@ -43,36 +43,6 @@ app = RESTApp(cfg.app['name'])
 app.setup()
 
 
-# parser = reqparse.RequestParser()
-# parser.add_argument('products', action='append')
-# parser.add_argument('userID', type=int)
-#
-# class ShoppingList(Resource):
-#     def get(self, userID=None):
-#         if userID:
-#             shopping_lists = mongo.db.List.find({'userID': userID})
-#         else:
-#             shopping_lists = mongo.db.List.find()
-#         return dumps(shopping_lists)
-#
-#     def put(self, userID):  # TODO replace userID with unique attribute (possibly ObjectID)
-#         args = parser.parse_args()
-#         mongo.db.List.update_one({'userID': userID}, {'$set': {'products': args['products']}})
-#         return redirect(url_for('userID', userID=userID))
-#
-#     def post(self):
-#         args = parser.parse_args()
-#         mongo.db.List.insert(args)
-#         return redirect(url_for('shopping_lists'))
-#
-#     def delete(self, userID):  # TODO replace userID with unique attribute (possibly ObjectID)
-#         mongo.db.List.remove({'userID': userID})
-#
-#
-# api.add_resource(ShoppingList, '/shopping_lists/', endpoint='shopping_lists')
-# api.add_resource(ShoppingList, '/shopping_lists/<int:userID>/', endpoint='userID')
-
-
 @RESTApp.route(app, '/')
 def hello_world():
     return 'Greetings'
@@ -80,5 +50,3 @@ def hello_world():
 
 if __name__ == '__main__':
     app.run(debug=cfg.app['debug'])
-    # host=0.0.0.0 if accessing server from outside localhost but inside local network
-    # host=10.0.2.2 for Android AVD
