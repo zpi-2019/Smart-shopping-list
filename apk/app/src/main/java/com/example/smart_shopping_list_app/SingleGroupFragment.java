@@ -1,10 +1,8 @@
 package com.example.smart_shopping_list_app;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,16 +15,20 @@ import android.widget.Toast;
 
 import java.util.Objects;
 
-public class ListOfListsFragment extends Fragment {
-    AppViewModel appViewModel;
-    MyListsRecyclerViewAdapter adapter;
-    RecyclerView recyclerView;
 
-    public ListOfListsFragment() {
+public class SingleGroupFragment extends Fragment {
+    RecyclerView recyclerView;
+    int currentGroupID;
+    AppViewModel appViewModel;
+    MySingleGroupRecyclerViewAdapter adapter;
+
+    public SingleGroupFragment() {
     }
 
-    public static ListOfListsFragment newInstance() {
-        return new ListOfListsFragment();
+    public static SingleGroupFragment newInstance(int id) {
+        SingleGroupFragment fragment = new SingleGroupFragment();
+        fragment.currentGroupID = id;
+        return fragment;
     }
 
     @Override
@@ -38,37 +40,29 @@ public class ListOfListsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.list_of_lists_fragment, container, false);
-        Context context = view.getContext();
-        recyclerView = view.findViewById(R.id.list_of_lists_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new MyListsRecyclerViewAdapter();
-        adapter.setmValues(appViewModel.getAllUsersLists(StartActivity.currentUserID));
+        View view = inflater.inflate(R.layout.single_group_fragment, container, false);
+        recyclerView = view.findViewById(R.id.single_group_recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recyclerView.setHasFixedSize(true);
+        adapter = new MySingleGroupRecyclerViewAdapter(appViewModel.selectAllGroupItemFromGroup(currentGroupID));
         recyclerView.setAdapter(adapter);
+        initButton(view);
         addItemTouchHelper();
-        FloatingActionButton fabAdd = view.findViewById(R.id.list_of_lists_button_add);
+        return view;
+    }
+
+    private void initButton(View view) {
+        FloatingActionButton fabAdd = view.findViewById(R.id.single_group_fab_add);
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddListFragment nextFrag = AddListFragment.newInstance();
+                AddGroupItemFragment nextFrag = AddGroupItemFragment.newInstance(currentGroupID);
                 Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
                         .replace(R.id.frame1, nextFrag, "findThisFragment")
                         .addToBackStack(null)
                         .commit();
             }
         });
-        return view;
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
     public void addItemTouchHelper() {
@@ -81,12 +75,10 @@ public class ListOfListsFragment extends Fragment {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                Toast.makeText(getActivity(), "Remove ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Removed ", Toast.LENGTH_SHORT).show();
                 int position = viewHolder.getAdapterPosition();
                 int id = adapter.removeItem(position);
-                appViewModel.deleteListUser(id);
-                appViewModel.deleteListItemByIDList(id);
-                appViewModel.deleteList(id);
+                appViewModel.deleteSingleListItem(id);
             }
         };
 

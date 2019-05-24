@@ -78,7 +78,7 @@ interface ListsDao {
     @Query("DELETE FROM Lists WHERE IDList = :idList")
     void delete(int idList);
 
-    @Query("SELECT IDList FROM Lists WHERE Name = :name")
+    @Query("SELECT Max(IDList) FROM Lists WHERE Name = :name")
     int getListByName(String name);
 
     @Update
@@ -108,6 +108,12 @@ interface GroupDao {
 
     @Update
     void update(Group group);
+
+    @Query("SELECT * FROM `Group`")
+    List<Group> selectAllGroups();
+
+    @Query("SELECT Max(IDGroup) FROM `Group` WHERE Name = :name")
+    int getGroupByName(String name);
 }
 
 
@@ -170,7 +176,7 @@ interface ProductDao {
     @Insert
     void insert(Product product);
 
-    @Query("SELECT IDProduct FROM Product WHERE Name = :name")
+    @Query("SELECT Max(IDProduct) FROM Product WHERE Name = :name")
     int selectProductID(String name);
 }
 
@@ -179,23 +185,29 @@ interface ProductDao {
 @Entity(foreignKeys = {
             @ForeignKey(entity = Group.class,
                 parentColumns = "IDGroup",
-                childColumns = "IDGroup"
-            ),
-            @ForeignKey(entity = Product.class,
-                parentColumns = "IDProduct",
-                childColumns = "IDProduct"
+                childColumns = "IDGroup2"
             )
         },
-        indices = {@Index("IDProduct"), @Index("IDGroup")})
+        indices = {@Index("IDGroup2")})
 class GroupItem {
     @PrimaryKey(autoGenerate = true)
     public int IDGroupItem;
 
-    @ColumnInfo( name = "IDGroup")
+    @ColumnInfo( name = "IDGroup2")
     public int IDGroup;
 
-    @ColumnInfo(name = "IDProduct")
-    public int IDProduct;
+    public String ProductName;
+
+    public double Amount;
+
+    public String Unit;
+
+    public GroupItem(int IDGroup, String ProductName, double Amount, String Unit) {
+        this.IDGroup = IDGroup;
+        this.ProductName = ProductName;
+        this.Amount = Amount;
+        this.Unit = Unit;
+    }
 }
 
 @Dao
@@ -203,7 +215,7 @@ interface GroupItemDao {
     @Insert
     void insert(GroupItem groupItem);
 
-    @Query("DELETE FROM GroupItem WHERE IDGroup = :idGroup")
+    @Query("DELETE FROM GroupItem WHERE IDGroup2 = :idGroup")
     void deleteGroupItemByIDGroup(int idGroup);
 
     @Query("DELETE FROM GroupItem WHERE IDGroupItem = :idGroupItem")
@@ -211,6 +223,9 @@ interface GroupItemDao {
 
     @Update
     void update(GroupItem groupItem);
+
+    @Query("SELECT * FROM GroupItem WHERE IDGroup2 = :idGroup")
+    List<GroupItem> selectAllGroupItemFormGroup(int idGroup);
 }
 
 

@@ -1,7 +1,6 @@
 package com.example.smart_shopping_list_app;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -14,16 +13,15 @@ import android.widget.EditText;
 import java.util.Calendar;
 import java.util.Objects;
 
-
-public class AddListFragment extends Fragment {
+public class AddGroupFragment extends Fragment {
     AppViewModel appViewModel;
     EditText etName;
 
-    public AddListFragment() {
+    public AddGroupFragment() {
     }
 
-    public static AddListFragment newInstance() {
-        return new AddListFragment();
+    public static AddGroupFragment newInstance() {
+        return new AddGroupFragment();
     }
 
     @Override
@@ -35,33 +33,22 @@ public class AddListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.add_list_fragment, container, false);
-        etName = view.findViewById(R.id.add_list_editText_name);
+        View view = inflater.inflate(R.layout.add_group_fragment, container, false);
+        etName = view.findViewById(R.id.add_group_editText_name);
         initButton(view);
         return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
     void initButton(View view) {
-        Button btCreateList = view.findViewById(R.id.add_list_button_add);
-        btCreateList.setOnClickListener(new View.OnClickListener() {
+        Button btAdd = view.findViewById(R.id.add_group_button_add);
+        btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (etName.getText() != null) {
-                    appViewModel.insertNewList(new Lists(etName.getText().toString(), Calendar.getInstance().getTimeInMillis(), Calendar.getInstance().getTimeInMillis()));
-                    int listID = appViewModel.getListID(etName.getText().toString());
-                    StartActivity.currentListID = listID;
-                    appViewModel.insertNewListUser(new ListUser(listID, StartActivity.currentUserID));
-                    SingleListFragment nextFrag = SingleListFragment.newInstance(listID);
+                if(!etName.getText().toString().equals("")) {
+                    String name = etName.getText().toString();
+                    appViewModel.insertNewGroup(new Group(name));
+                    int id = appViewModel.selectGroupID(name);
+                    SingleGroupFragment nextFrag = SingleGroupFragment.newInstance(id);
                     Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
                             .replace(R.id.frame1, nextFrag, "findThisFragment")
                             .addToBackStack(null)

@@ -13,9 +13,9 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/create_new_shopping_list" />
         <item
-            android:id="@+id/nav_add_group"
+            android:id="@+id/nav_groups"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/add_new_group" />
+            android:title="@string/groups_of_products" />
         <item
             android:id="@+id/nav_last_list"
             android:title="@string/last_used_list"/>

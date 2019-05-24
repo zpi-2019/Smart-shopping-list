@@ -30,7 +30,7 @@ public class StartFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_start, container, false);
+        View view = inflater.inflate(R.layout.start_fragment, container, false);
         initButtons(view);
         return view;
     }

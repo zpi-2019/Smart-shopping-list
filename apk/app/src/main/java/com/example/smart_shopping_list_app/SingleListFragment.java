@@ -9,10 +9,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import java.util.Objects;
 
 public class SingleListFragment extends Fragment {
@@ -26,8 +29,6 @@ public class SingleListFragment extends Fragment {
     public static SingleListFragment newInstance(int listID) {
         SingleListFragment fragment = new SingleListFragment();
         fragment.listID = listID;
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -46,6 +47,7 @@ public class SingleListFragment extends Fragment {
         adapter = new MyListRecyclerViewAdapter();
         adapter.setmValues(appViewModel.getAllProductsFromList(StartActivity.currentListID));
         recyclerView.setAdapter(adapter);
+        addItemTouchHelper();
         initButton(view);
         return view;
     }
@@ -74,12 +76,24 @@ public class SingleListFragment extends Fragment {
         });
     }
 
-    class AllListItems{
-        int IDProduct;
-        boolean isInProducts;
-        String productName;
-        double Amount;
-        String Unit;
+    public void addItemTouchHelper() {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                Toast.makeText(getActivity(), "Removed ", Toast.LENGTH_SHORT).show();
+                int position = viewHolder.getAdapterPosition();
+                int id = adapter.removeItem(position);
+                appViewModel.deleteSingleListItem(id);
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 }

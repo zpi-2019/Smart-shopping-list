@@ -10,7 +10,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import java.util.Objects;
@@ -34,7 +33,7 @@ public class StartActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         appViewModel = ViewModelProviders.of(this).get(AppViewModel.class);
-        setContentView(R.layout.activity_start);
+        setContentView(R.layout.start_activity);
         startDrawerLayoutAndMenu();
         startFragmentStart();
     }
@@ -73,8 +72,8 @@ public class StartActivity extends AppCompatActivity
 
         if (id == R.id.nav_all_lists) {
             fragmentClass = ListOfListsFragment.class;
-        } else if (id == R.id.nav_add_group) {
-            fragmentClass = null;
+        } else if (id == R.id.nav_groups) {
+            fragmentClass = ListOfGroupsFragment.class;
         } else if (id == R.id.nav_new_list) {
             fragmentClass = SingleListFragment.class;
         } else if (id == R.id.nav_settings) {

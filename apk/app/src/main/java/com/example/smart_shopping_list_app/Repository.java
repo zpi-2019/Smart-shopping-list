@@ -309,6 +309,7 @@ class Repository {
 
 
     //////////////Select//////////////
+
     List<ListItem> selectListItemJoinProduct(int idList) {
         List<ListItem> list = null;
         try {
@@ -438,6 +439,83 @@ class Repository {
         }
     }
 
+
+    List<Group> selectAllGroups() {
+        List<Group> list = null;
+        try {
+            list = new SelectAllGroupsAsync(groupDao).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    private static class SelectAllGroupsAsync extends AsyncTask<Void, Void, List<Group>> {
+        private GroupDao groupDao;
+
+        SelectAllGroupsAsync(GroupDao groupDao) {
+            this.groupDao = groupDao;
+        }
+
+        @Override
+        protected List<Group> doInBackground(Void... voids) {
+            return groupDao.selectAllGroups();
+        }
+    }
+
+
+    List<GroupItem> selectAllGroupItemFromGroup(int idGroup) {
+        List<GroupItem> list = null;
+        try {
+            list = new SelectAllGroupItemFromGroupAsync(groupItemDao).execute(idGroup).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    private static class SelectAllGroupItemFromGroupAsync extends AsyncTask<Integer, Void, List<GroupItem>> {
+        private GroupItemDao groupItemDao;
+
+        SelectAllGroupItemFromGroupAsync(GroupItemDao groupItemDao) {
+            this.groupItemDao = groupItemDao;
+        }
+
+        @Override
+        protected List<GroupItem> doInBackground(Integer... integers) {
+            return groupItemDao.selectAllGroupItemFormGroup(integers[0]);
+        }
+    }
+
+
+    int selectGroupID(String name){
+        int result = 0;
+        try {
+            result = new SelectGroupIDAsync(groupDao).execute(name).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private static class SelectGroupIDAsync extends AsyncTask<String, Void, Integer>{
+        private GroupDao groupDao;
+
+        SelectGroupIDAsync(GroupDao groupDao){
+            this.groupDao = groupDao;
+        }
+
+        @Override
+        protected Integer doInBackground(String... strings) {
+            return groupDao.getGroupByName(strings[0]);
+        }
+    }
 
 
     //////////////Update//////////////

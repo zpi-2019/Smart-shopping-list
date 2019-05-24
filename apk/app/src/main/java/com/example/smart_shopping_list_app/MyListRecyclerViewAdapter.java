@@ -35,6 +35,7 @@ public class MyListRecyclerViewAdapter extends RecyclerView.Adapter<MyListRecycl
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+        holder.idListItem = mValues.get(position).IDListItem;
         holder.tvItemName.setText(mValues.get(position).ProductName);
         holder.amount.setText(String.format("%s %s", mValues.get(position).Amount, mValues.get(position).Unit));
         holder.btUndo.setOnClickListener(new OnClickListenerSingleList(holder, "", Color.BLACK, true));
@@ -55,6 +56,7 @@ public class MyListRecyclerViewAdapter extends RecyclerView.Adapter<MyListRecycl
         TextView status;
         ConstraintLayout foreground;
         Button btUndo;
+        int idListItem;
 
         ViewHolder(View view) {
             super(view);
@@ -65,5 +67,12 @@ public class MyListRecyclerViewAdapter extends RecyclerView.Adapter<MyListRecycl
             foreground = itemView.findViewById(R.id.view_foreground);
             btUndo = itemView.findViewById(R.id.button_undo);
         }
+    }
+
+    int removeItem(int position) {
+        int id = mValues.get(position).IDListItem;
+        mValues.remove(position);
+        notifyItemRemoved(position);
+        return id;
     }
 }

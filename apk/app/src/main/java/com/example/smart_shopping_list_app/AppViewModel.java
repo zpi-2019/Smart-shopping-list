@@ -79,9 +79,12 @@ public class AppViewModel extends AndroidViewModel {
 
     int selectProductID(String name) { return repository.selectProductID(name); }
 
+    List<Group> selectAllGroups() { return repository.selectAllGroups(); }
 
-    /* getAllDistances, getUserGroups, getGroupItems
+    List<GroupItem> selectAllGroupItemFromGroup(int idGroup) { return repository.selectAllGroupItemFromGroup(idGroup); }
 
+    int selectGroupID(String name) { return repository.selectGroupID(name); }
+    /* getAllDistances
     */
 
 
