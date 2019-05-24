@@ -19,15 +19,12 @@ public class OnClickListenerSingleList implements View.OnClickListener {
         if(isUndo) {
             holder.status.setVisibility(View.INVISIBLE);
             holder.btUndo.setVisibility(View.INVISIBLE);
-            holder.swipeRevealLayout.setLockDrag(false);
         }
         else{
             holder.status.setText(text);
             holder.status.setTextColor(color);
             holder.status.setVisibility(View.VISIBLE);
             holder.btUndo.setVisibility(View.VISIBLE);
-            holder.swipeRevealLayout.close(true);
-            holder.swipeRevealLayout.setLockDrag(true);
         }
     }
 }

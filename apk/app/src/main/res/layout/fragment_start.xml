@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StartActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".StartFragment">
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
@@ -49,7 +50,7 @@
         app:layout_constraintGuide_percent="0.58"/>
 
     <Button
-        android:id="@+id/all_lists"
+        android:id="@+id/fragment_start_button_all_lists"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="1dp"
@@ -64,7 +65,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/add_list"
+        android:id="@+id/fragment_start_button_add_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -79,7 +80,7 @@
         android:focusable="true" />
 
     <Button
-        android:id="@+id/last_list"
+        android:id="@+id/fragment_start_button_last_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="1dp"
@@ -94,7 +95,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
     <TextView
-        android:id="@+id/hello_text"
+        android:id="@+id/fragment_start_textView_hello"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -105,4 +106,5 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

@@ -1,28 +1,23 @@
 package com.example.smart_shopping_list_app;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
-
-import com.chauthai.swipereveallayout.SwipeRevealLayout;
-import com.chauthai.swipereveallayout.ViewBinderHelper;
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class MyListsRecyclerViewAdapter extends RecyclerView.Adapter<MyListsRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Integer> mValues;
-    private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
+    private List<ListUserAndList> mValues;
 
-    MyListsRecyclerViewAdapter() {
-        mValues = new ArrayList<>();
+    MyListsRecyclerViewAdapter() { }
+
+    void setmValues(List<ListUserAndList> list) {
+        mValues = list;
     }
 
     @NonNull
@@ -35,41 +30,50 @@ public class MyListsRecyclerViewAdapter extends RecyclerView.Adapter<MyListsRecy
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        viewBinderHelper.bind(holder.swipeRevealLayout, String.valueOf(position));
-        holder.tvListTitle.setText("Nowa lista" + position);
-        holder.tvCounter.setText("0/24");
-        holder.btDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                notifyItemRemoved(holder.getAdapterPosition());
-            }
-        });
+        holder.listID = mValues.get(holder.getAdapterPosition()).listUser.IDList;
+        holder.tvListTitle.setText(String.valueOf(mValues.get(holder.getAdapterPosition()).userList.get(0).Name));
+        holder.tvCounter.setText(String.valueOf(holder.listID));
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-        SwipeRevealLayout swipeRevealLayout;
-        TextView tvListTitle;
-        TextView tvCounter;
-        ImageButton btDelete;
-
-        ViewHolder(View view) {
-            super(view);
-            tvListTitle = itemView.findViewById(R.id.list_title);
-            tvCounter = itemView.findViewById(R.id.counter);
-            swipeRevealLayout = itemView.findViewById(R.id.swipe_layout_2);
-            btDelete = itemView.findViewById(R.id.button_delete);
+        if (mValues != null) {
+            return mValues.size();
+        }
+        else {
+            return 0;
         }
     }
 
-    void saveStates(Bundle outState) {
-        viewBinderHelper.saveStates(outState);
+    class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tvListTitle;
+        TextView tvCounter;
+        int listID;
+
+        ViewHolder(final View view) {
+            super(view);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    StartActivity.currentListID = listID;
+                    if(view.getContext() instanceof StartActivity) {
+                        SingleListFragment nextFrag = SingleListFragment.newInstance(listID);
+                        Objects.requireNonNull((StartActivity) v.getContext()).getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.frame1, nextFrag, "findThisFragment")
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                }
+            });
+            tvListTitle = itemView.findViewById(R.id.list_title);
+            tvCounter = itemView.findViewById(R.id.counter);
+        }
     }
 
-    void restoreStates(Bundle inState) {
-        viewBinderHelper.restoreStates(inState);
-    }}
+    int removeItem(int position) {
+        int id = mValues.get(position).userList.get(0).IDList;
+        mValues.remove(position);
+        notifyItemRemoved(position);
+        return id;
+    }
+}

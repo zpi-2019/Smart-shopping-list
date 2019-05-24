@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:tools="http://schemas.android.com/tools"
+<android.support.v7.widget.CardView
     app:cardCornerRadius="10dp"
     app:cardElevation="1dp"
     app:cardMaxElevation="1dp"
@@ -8,43 +8,6 @@
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <com.chauthai.swipereveallayout.SwipeRevealLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/swipe_layout"
-        app:mode="same_level"
-        app:dragEdge="right"
-        android:layout_width="match_parent"
-        android:layout_height="100dp">
-
-        <FrameLayout
-            android:id="@+id/view_background"
-            android:layout_width="200dp"
-            android:layout_height="match_parent">
-
-            <ImageButton
-                android:id="@+id/button_lack"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:padding="0dp"
-                android:scaleType="centerCrop"
-                android:layout_gravity="start"
-                app:srcCompat="@drawable/delete_button"
-                tools:ignore="ContentDescription" />
-
-            <ImageButton
-                android:id="@+id/button_buy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="0dp"
-                android:scaleType="centerCrop"
-                android:layout_gravity="start"
-                android:layout_marginStart="100dp"
-                app:srcCompat="@drawable/buy_button"
-                tools:ignore="ContentDescription" />
-        </FrameLayout>
-
         <android.support.constraint.ConstraintLayout
             android:id="@+id/view_foreground"
             android:layout_width="match_parent"
@@ -116,6 +79,4 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </android.support.constraint.ConstraintLayout>
-
-    </com.chauthai.swipereveallayout.SwipeRevealLayout>
 </android.support.v7.widget.CardView>
