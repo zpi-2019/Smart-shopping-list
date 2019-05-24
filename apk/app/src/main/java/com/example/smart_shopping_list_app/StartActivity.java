@@ -1,6 +1,7 @@
 package com.example.smart_shopping_list_app;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -12,6 +13,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.Objects;
 
 
@@ -20,6 +27,7 @@ public class StartActivity extends AppCompatActivity
     private AppViewModel appViewModel;
     static int currentUserID = 1;
     static int currentListID = 1;
+    private FirebaseAuth mAuth;
 
     public enum Unit {
         Kg, G, Litr, Sztuka
@@ -32,10 +40,28 @@ public class StartActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
         appViewModel = ViewModelProviders.of(this).get(AppViewModel.class);
         setContentView(R.layout.start_activity);
         startDrawerLayoutAndMenu();
         startFragmentStart();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            String name = currentUser.getDisplayName();
+            String email = currentUser.getEmail();
+            Uri photoUrl = currentUser.getPhotoUrl();
+            ImageView imageView = findViewById(R.id.user_imageView);
+            imageView.setImageURI(photoUrl);
+            TextView tvName = findViewById(R.id.user_name);
+            tvName.setText(name);
+            TextView tvEmail = findViewById(R.id.user_email);
+            tvEmail.setText(email);
+        }
     }
 
     @Override

@@ -27,4 +27,11 @@
     <string name="create_list">Create list</string>
     <string name="groups_of_products">Groups of products</string>
     <string name="create_group">Create group</string>
+    <string name="register">Register!</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="auth_failed">Authentication failed</string>
+    <string name="minimum_password">Password is too short.</string>
+    <string name="password">Password</string>
+    <string name="e_mail">E-mail</string>
 </resources>
