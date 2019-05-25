@@ -7,7 +7,10 @@ db = {
 
 app = {
     'name': 'ShoppingListApi',
-    'debug': False
+    'debug': False,
+    'archive_week_day': 'sun',
+    'archive_hour': 22,
+    'archive_min_age_days': 7
 }
 
 endpoints = {
@@ -25,8 +28,8 @@ model = {
     'iterations': 25,
     'def_version': 1,
     'train_week_day': 'mon',
-    'train_period_days': 30,
     'train_hour': 1,
+    'train_period_days': 30,
     'test_data': [
         ['owoce', 'szynka'],
         ['owoce', 'szynka'],
