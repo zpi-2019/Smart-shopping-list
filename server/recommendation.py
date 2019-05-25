@@ -30,7 +30,6 @@ class Recommender:
         self.distance = None
         self._distance_buffer = None
         self.version = cfg.model['def_version']
-        self.scheduler = None
 
     def create_new_model(self, data_source, name=None):
         """
@@ -42,7 +41,7 @@ class Recommender:
         if isinstance(data_source, list):
             data = data_source
         else:
-            data = self.pull_data(data_source, cfg.model['train_period_days'])
+            data = self._pull_data(data_source, cfg.model['train_period_days'])
 
         self._glove = GloVe(data,
                             learning_rate=cfg.model['learning_rate'],
@@ -56,7 +55,7 @@ class Recommender:
             name = datetime.now().strftime('GloVe[%Y-%m-%d]')
         self._glove.setup_logger(name)
 
-    def pull_data(self, db, days):
+    def _pull_data(self, db, days):
         c_date = datetime.now()
         delta = timedelta(days=days)
         date = c_date - delta
@@ -76,7 +75,7 @@ class Recommender:
             self.version = model['version']
             self.distance = model['model']
 
-    def save_to_db(self, db):
+    def _save_to_db(self, db):
         """
         Save current model into db
         """
@@ -87,7 +86,7 @@ class Recommender:
 
         db.models.insert(model)
 
-    def train_model(self):
+    def _train_model(self):
         """
         Train currently loaded model and create distance vector. New distance vector is saved into buffer.
         """
@@ -97,7 +96,7 @@ class Recommender:
         space = self._glove.fit()
         self._distance_buffer = pdist(space)
 
-    def update_distances(self):
+    def _update_distances(self):
         """
         Push reformatted distance vector from buffer into distance attribute. Buffer is set to None after this
         operation.
@@ -112,9 +111,9 @@ class Recommender:
 
     def _training_job(self, db):
         self.create_new_model(db)
-        self.train_model()
-        self.update_distances()
-        self.save_to_db(db)
+        self._train_model()
+        self._update_distances()
+        self._save_to_db(db)
 
     def _reformat_vector(self, vector):
         """
