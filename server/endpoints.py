@@ -22,7 +22,7 @@ class ShoppingList(Resource):
     def __init__(self, db):
         self.db = db
         self.parser = reqparse.RequestParser()
-        self.parser.add_argument('date', type=lambda x: datetime.strptime(x, '%d.%m.%Y').date(), location='json')
+        self.parser.add_argument('date', type=lambda x: datetime.strptime(x, '%d.%m.%Y'), location='json')
         self.parser.add_argument('list', type=list, location='json')
 
     def post(self):
