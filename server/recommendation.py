@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 from random import shuffle
 
-from apscheduler.schedulers.background import BackgroundScheduler
 from scipy.spatial.distance import pdist
 
 import config as cfg
@@ -107,11 +106,9 @@ class Recommender:
         self.version += 1
         self._distance_buffer = None
 
-    def start_training_cycle(self, db):
-        self.scheduler = BackgroundScheduler()
-        self.scheduler.add_job(self._training_job, 'cron', day_of_week=cfg.model['train_week_day'],
-                               hour=cfg.model['train_hour'], args=[db])
-        self.scheduler.start()
+    def start_training_cycle(self, db, scheduler):
+        scheduler.add_job(self._training_job, 'cron', day_of_week=cfg.model['train_week_day'],
+                          hour=cfg.model['train_hour'], args=[db])
 
     def _training_job(self, db):
         self.create_new_model(db)
