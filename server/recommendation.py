@@ -139,43 +139,6 @@ class Recommender:
         """
         Create test model
         """
-        data = [
-            ['owoce', 'szynka'],
-            ['owoce', 'szynka'],
-            ['owoce', 'szynka'],
-            ['owoce', 'szynka'],
-            ['owoce', 'szynka'],
-            ['owoce', 'szynka'],
-            ['owoce', 'szynka'],
-            ['owoce', 'szynka'],
-            ['woda', 'chleb'],
-            ['woda', 'chleb'],
-            ['woda', 'chleb'],
-            ['woda', 'chleb'],
-            ['woda', 'chleb'],
-            ['woda', 'chleb'],
-            ['woda', 'chleb'],
-            ['woda', 'chleb'],
-            ['kawa', 'ciastka'],
-            ['kawa', 'ciastka'],
-            ['kawa', 'ciastka'],
-            ['kawa', 'ciastka'],
-            ['kawa', 'ciastka'],
-            ['kawa', 'ciastka'],
-            ['kawa', 'ciastka'],
-            ['kawa', 'ciastka'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-        ]
+        data = cfg.model['test_data']
         shuffle(data)
         self.create_new_model(data)
