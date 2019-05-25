@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from random import shuffle
 
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -43,7 +43,7 @@ class Recommender:
         if isinstance(data_source, list):
             data = data_source
         else:
-            pass  # TODO get form db
+            data = self.pull_data(data_source, cfg.model['train_period_days'])
 
         self._glove = GloVe(data,
                             learning_rate=cfg.model['learning_rate'],
@@ -56,6 +56,15 @@ class Recommender:
         if name is None:
             name = datetime.now().strftime('GloVe[%Y-%m-%d]')
         self._glove.setup_logger(name)
+
+    def pull_data(self, db, days):
+        c_date = datetime.now()
+        delta = timedelta(days=days)
+        date = c_date - delta
+
+        data = db.archive.find({'date': {'$gt': date}}, {'_id': 0, 'list': 1})
+
+        return [record['list'] for record in data]
 
     def sync_with_db(self, db):
         """

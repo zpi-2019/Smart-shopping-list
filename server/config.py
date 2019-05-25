@@ -25,5 +25,6 @@ model = {
     'iterations': 25,
     'def_version': 1,
     'train_week_day': 'mon',
+    'train_period_days': 30,
     'train_hour': 1
 }
