@@ -1,6 +1,7 @@
 package com.example.smart_shopping_list_app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -77,6 +78,14 @@ public class StartFragment extends Fragment {
                         .replace(R.id.frame1, nextFrag, "findThisFragment")
                         .addToBackStack(null)
                         .commit();
+            }
+        });
+        Button btSignIn = view.findViewById(R.id.fragment_start_button_sign_in);
+        btSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
             }
         });
     }

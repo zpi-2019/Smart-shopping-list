@@ -1,21 +1,27 @@
 package com.example.smart_shopping_list_app;
 
+import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -28,6 +34,7 @@ public class StartActivity extends AppCompatActivity
     static int currentUserID = 1;
     static int currentListID = 1;
     private FirebaseAuth mAuth;
+    private static final int MEMORY_ACCESS_KEY = 4;
 
     public enum Unit {
         Kg, G, Litr, Sztuka
@@ -40,6 +47,11 @@ public class StartActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(!(ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED)) {
+            ActivityCompat.requestPermissions(StartActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MEMORY_ACCESS_KEY);
+            Log.d("Per", "granted");
+        }
+        FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
         appViewModel = ViewModelProviders.of(this).get(AppViewModel.class);
         setContentView(R.layout.start_activity);
@@ -50,18 +62,6 @@ public class StartActivity extends AppCompatActivity
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            String name = currentUser.getDisplayName();
-            String email = currentUser.getEmail();
-            Uri photoUrl = currentUser.getPhotoUrl();
-            ImageView imageView = findViewById(R.id.user_imageView);
-            imageView.setImageURI(photoUrl);
-            TextView tvName = findViewById(R.id.user_name);
-            tvName.setText(name);
-            TextView tvEmail = findViewById(R.id.user_email);
-            tvEmail.setText(email);
-        }
     }
 
     @Override
@@ -144,6 +144,18 @@ public class StartActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            String name = currentUser.getDisplayName();
+            String email = currentUser.getEmail();
+            Uri photoUrl = currentUser.getPhotoUrl();
+            ImageView imageView = navigationView.getHeaderView(0).findViewById(R.id.user_imageView);
+            imageView.setImageURI(photoUrl);
+            TextView tvName = navigationView.getHeaderView(0).findViewById(R.id.user_name);
+            tvName.setText(name);
+            TextView tvEmail = navigationView.getHeaderView(0).findViewById(R.id.user_email);
+            tvEmail.setText(email);
+        }
         navigationView.setNavigationItemSelectedListener(this);
     }
 }
