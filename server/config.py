@@ -5,6 +5,16 @@ db = {
     'local_url': 'mongodb://localhost:27017/ShoppingListDb'
 }
 
+firebase = {
+    "apiKey": environ.get('FIREBASE_KEY', None),
+    "authDomain": environ.get('FIREBASE_AUTHDOMAIN', None),
+    "databaseURL": environ.get('FIREBASE_DATABASEURL', None),
+    "projectId": environ.get('FIREBASE_PROJECTID', None),
+    "storageBucket": environ.get('FIREBASE_STORAGEBUCKET', None),
+    "messagingSenderId": environ.get('FIREBASE_MESSAGINGSENDERID', None),
+    "appId": environ.get('FIREBASE_APPID', None)
+}
+
 app = {
     'name': 'ShoppingListApi',
     'debug': False
