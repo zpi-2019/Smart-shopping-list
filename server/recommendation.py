@@ -1,7 +1,6 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from random import shuffle
 
-from apscheduler.schedulers.background import BackgroundScheduler
 from scipy.spatial.distance import pdist
 
 import config as cfg
@@ -31,7 +30,6 @@ class Recommender:
         self.distance = None
         self._distance_buffer = None
         self.version = cfg.model['def_version']
-        self.scheduler = None
 
     def create_new_model(self, data_source, name=None):
         """
@@ -43,7 +41,7 @@ class Recommender:
         if isinstance(data_source, list):
             data = data_source
         else:
-            pass  # TODO get form db
+            data = self._pull_data(data_source, cfg.model['train_period_days'])
 
         self._glove = GloVe(data,
                             learning_rate=cfg.model['learning_rate'],
@@ -57,6 +55,15 @@ class Recommender:
             name = datetime.now().strftime('GloVe[%Y-%m-%d]')
         self._glove.setup_logger(name)
 
+    def _pull_data(self, db, days):
+        c_date = datetime.now()
+        delta = timedelta(days=days)
+        date = c_date - delta
+
+        data = db.archive.find({'date': {'$gt': date}}, {'_id': 0, 'list': 1})
+
+        return [record['list'] for record in data]
+
     def sync_with_db(self, db):
         """
         Synchronize model and version with last saved in db
@@ -68,7 +75,7 @@ class Recommender:
             self.version = model['version']
             self.distance = model['model']
 
-    def save_to_db(self, db):
+    def _save_to_db(self, db):
         """
         Save current model into db
         """
@@ -79,7 +86,7 @@ class Recommender:
 
         db.models.insert(model)
 
-    def train_model(self):
+    def _train_model(self):
         """
         Train currently loaded model and create distance vector. New distance vector is saved into buffer.
         """
@@ -89,7 +96,7 @@ class Recommender:
         space = self._glove.fit()
         self._distance_buffer = pdist(space)
 
-    def update_distances(self):
+    def _update_distances(self):
         """
         Push reformatted distance vector from buffer into distance attribute. Buffer is set to None after this
         operation.
@@ -98,17 +105,15 @@ class Recommender:
         self.version += 1
         self._distance_buffer = None
 
-    def start_training_cycle(self, db):
-        self.scheduler = BackgroundScheduler()
-        self.scheduler.add_job(self._training_job, 'cron', day_of_week=cfg.model['train_week_day'],
-                               hour=cfg.model['train_hour'], args=[db])
-        self.scheduler.start()
+    def start_training_cycle(self, db, scheduler):
+        scheduler.add_job(self._training_job, 'cron', day_of_week=cfg.model['train_week_day'],
+                          hour=cfg.model['train_hour'], args=[db])
 
     def _training_job(self, db):
         self.create_new_model(db)
-        self.train_model()
-        self.update_distances()
-        self.save_to_db(db)
+        self._train_model()
+        self._update_distances()
+        self._save_to_db(db)
 
     def _reformat_vector(self, vector):
         """
@@ -133,43 +138,6 @@ class Recommender:
         """
         Create test model
         """
-        data = [
-            ['owoce', 'szynka'],
-            ['owoce', 'szynka'],
-            ['owoce', 'szynka'],
-            ['owoce', 'szynka'],
-            ['owoce', 'szynka'],
-            ['owoce', 'szynka'],
-            ['owoce', 'szynka'],
-            ['owoce', 'szynka'],
-            ['woda', 'chleb'],
-            ['woda', 'chleb'],
-            ['woda', 'chleb'],
-            ['woda', 'chleb'],
-            ['woda', 'chleb'],
-            ['woda', 'chleb'],
-            ['woda', 'chleb'],
-            ['woda', 'chleb'],
-            ['kawa', 'ciastka'],
-            ['kawa', 'ciastka'],
-            ['kawa', 'ciastka'],
-            ['kawa', 'ciastka'],
-            ['kawa', 'ciastka'],
-            ['kawa', 'ciastka'],
-            ['kawa', 'ciastka'],
-            ['kawa', 'ciastka'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-            ['szynka', 'woda'],
-        ]
+        data = cfg.model['test_data']
         shuffle(data)
         self.create_new_model(data)
