@@ -251,15 +251,15 @@ class ListItem {
 
     public String Unit;
 
-    public boolean ToRecom;
+    public String color;
 
-    public ListItem(int IDList, String ProductName, String Status, double Amount, String Unit, boolean ToRecom) {
+    public ListItem(int IDList, String ProductName, String Status, double Amount, String Unit, String color) {
         this.IDList = IDList;
         this.ProductName = ProductName;
         this.Status = Status;
         this.Amount = Amount;
         this.Unit = Unit;
-        this.ToRecom = ToRecom;
+        this.color = color;
     }
 }
 

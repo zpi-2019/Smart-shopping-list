@@ -18,7 +18,7 @@ import android.widget.Spinner;
 import java.util.Objects;
 
 
-public class AddItemFragment extends Fragment {
+public class AddListItemFragment extends Fragment {
     AppViewModel appViewModel;
     RecyclerView recyclerView;
     Button btAll;
@@ -26,11 +26,12 @@ public class AddItemFragment extends Fragment {
     EditText etName;
     EditText etAmount;
     Spinner spUnit;
+    Spinner spColor;
 
-    public AddItemFragment() { }
+    public AddListItemFragment() { }
 
-    public static AddItemFragment newInstance() {
-        return new AddItemFragment();
+    public static AddListItemFragment newInstance() {
+        return new AddListItemFragment();
     }
 
     @Override
@@ -80,11 +81,12 @@ public class AddItemFragment extends Fragment {
                     String name = etName.getText().toString();
                     double amount = Double.parseDouble(etAmount.getText().toString());
                     String unit = spUnit.getSelectedItem().toString();
+                    String color = spColor.getSelectedItem().toString();
                     int productID = appViewModel.selectProductID(name);
                     if (productID != 0)
-                        appViewModel.insertNewListItem(new ListItem(StartActivity.currentListID, name, StartActivity.Status.DoKupienia.toString(), amount, unit, true));
+                        appViewModel.insertNewListItem(new ListItem(StartActivity.currentListID, name, StartActivity.Status.toBuy.toString(), amount, unit, color));
                     else {
-                        appViewModel.insertNewListItem(new ListItem(StartActivity.currentListID, name, StartActivity.Status.DoKupienia.toString(), amount, unit, false));
+                        appViewModel.insertNewListItem(new ListItem(StartActivity.currentListID, name, StartActivity.Status.toBuy.toString(), amount, unit, color));
                     }
                     etAmount.setText("");
                     etName.setText("");
@@ -108,5 +110,7 @@ public class AddItemFragment extends Fragment {
     private void initSpinner(View view){
         spUnit = view.findViewById(R.id.add_item_spinner_unit);
         spUnit.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.support_simple_spinner_dropdown_item, StartActivity.Unit.values()));
+        spColor = view.findViewById(R.id.add_item_spinner_color);
+        spColor.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.support_simple_spinner_dropdown_item, StartActivity.GroupColors.values()));
     }
 }

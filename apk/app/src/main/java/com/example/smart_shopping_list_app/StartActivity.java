@@ -41,7 +41,11 @@ public class StartActivity extends AppCompatActivity
     }
 
     public enum Status {
-        Kupione, Brak, DoKupienia
+        bought, lack, toBuy
+    }
+
+    public enum GroupColors {
+        Red, Blue, Pink, Green, Black
     }
 
     @Override
@@ -146,6 +150,7 @@ public class StartActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
+            currentUser.getIdToken(true);
             String name = currentUser.getDisplayName();
             String email = currentUser.getEmail();
             Uri photoUrl = currentUser.getPhotoUrl();
