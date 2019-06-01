@@ -56,8 +56,6 @@ class RESTApp(Flask):
         self._api.add_resource(Dists, cfg.endpoints['model'], resource_class_kwargs={'rec': self.recommender})
         self._api.add_resource(Version, cfg.endpoints['version'], resource_class_kwargs={'rec': self.recommender})
         self._api.add_resource(ShoppingList, cfg.endpoints['list'], resource_class_kwargs={'db': self._db}, endpoint='list')
-        self._api.add_resource(ShoppingList, cfg.endpoints['list_by_userToken'], resource_class_kwargs={'db': self._db}, endpoint='list_by_userToken')
-        self._api.add_resource(ShoppingList, cfg.endpoints['list_by_listId'], resource_class_kwargs={'db': self._db}, endpoint='list_by_listId')
 
     def _setup_firebase_app(self):
         cred = firebase_admin.credentials.Certificate("serviceAccountKey.json")

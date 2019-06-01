@@ -16,9 +16,7 @@ app = {
 endpoints = {
     'model': '/model/',
     'version': '/model/version',
-    'list': '/lists/',
-    'list_by_userToken' : '/lists/<string:userToken>/',
-    'list_by_listId' : '/lists/<string:userToken>/<int:listId>/'
+    'list': '/lists/'
 }
 
 model = {
