@@ -15,6 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -27,11 +30,15 @@ public class AddListItemFragment extends Fragment {
     EditText etAmount;
     Spinner spUnit;
     Spinner spColor;
+    List<ListItem> mValues;
+    MyRecomRecyclerViewAdapter adapter;
 
     public AddListItemFragment() { }
 
-    public static AddListItemFragment newInstance() {
-        return new AddListItemFragment();
+    public static AddListItemFragment newInstance(List<ListItem> list) {
+        AddListItemFragment fragment = new AddListItemFragment();
+        fragment.mValues = list;
+        return fragment;
     }
 
     @Override
@@ -90,7 +97,9 @@ public class AddListItemFragment extends Fragment {
                     }
                     etAmount.setText("");
                     etName.setText("");
-                    //reload recycleView data
+                    adapter.setmValues(calculateDistances());
+                    //TODO:repair refresh adapter and set product name after click on item
+                    adapter.notifyDataSetChanged();
                 }
             }
         });
@@ -100,6 +109,8 @@ public class AddListItemFragment extends Fragment {
         recyclerView = view.findViewById(R.id.add_item_recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 2));
+        adapter = new MyRecomRecyclerViewAdapter(calculateDistances());
+        recyclerView.setAdapter(adapter);
     }
 
     private void initTexts(View view) {
@@ -112,5 +123,53 @@ public class AddListItemFragment extends Fragment {
         spUnit.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.support_simple_spinner_dropdown_item, StartActivity.Unit.values()));
         spColor = view.findViewById(R.id.add_item_spinner_color);
         spColor.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.support_simple_spinner_dropdown_item, StartActivity.GroupColors.values()));
+    }
+
+    private List<Recommendations> calculateDistances(){
+        List<Integer> itemsNotInList = appViewModel.selectAllProductsID();
+        List<Integer> itemsInList = new ArrayList<>();
+        List<Distance> distances = appViewModel.selectAllDistances();
+        List<Recommendations> recom = new ArrayList<>();
+        for(ListItem item: mValues){
+            int id = appViewModel.selectProductID(item.ProductName);
+            if(id != 0) {
+                itemsNotInList.remove(Integer.valueOf(id));
+                itemsInList.add(id);
+            }
+        }
+
+        for(int id: itemsNotInList){
+            double sum = 0;
+            for(Distance distance : distances){
+                if(id == distance.IDProduct1 && itemsInList.contains(distance.IDProduct2)){
+                    sum += distance.Distance;
+                }
+                if(id == distance.IDProduct2 && itemsInList.contains(distance.IDProduct1)){
+                    sum += distance.Distance;
+                }
+            }
+            recom.add(new Recommendations(appViewModel.selectProductName(id), sum));
+        }
+        Collections.sort(recom);
+        return recom;
+    }
+
+    class Recommendations implements Comparable<Recommendations>{
+        String name;
+        double value;
+
+        Recommendations(String name, double value) {
+            this.name = name;
+            this.value = value;
+        }
+
+        Double getValue(){
+            return value;
+        }
+
+        @Override
+        public int compareTo(@NonNull Recommendations o) {
+            return this.getValue().compareTo(o.getValue());
+        }
     }
 }

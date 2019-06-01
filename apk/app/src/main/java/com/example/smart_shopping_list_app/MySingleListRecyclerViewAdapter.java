@@ -27,6 +27,10 @@ public class MySingleListRecyclerViewAdapter extends RecyclerView.Adapter<MySing
         notifyDataSetChanged();
     }
 
+    List<ListItem> getmValues() {
+        return mValues;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

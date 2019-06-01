@@ -2,6 +2,8 @@ package com.example.smart_shopping_list_app;
 
 import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -26,13 +28,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 
 public class StartActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static int MODEL_VERSION;
     private AppViewModel appViewModel;
     static int currentUserID = 1;
-    static int currentListID = 1;
+    static int currentListID = 0;
     private FirebaseAuth mAuth;
     private static final int MEMORY_ACCESS_KEY = 4;
 
@@ -53,11 +57,11 @@ public class StartActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         if(!(ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED)) {
             ActivityCompat.requestPermissions(StartActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MEMORY_ACCESS_KEY);
-            Log.d("Per", "granted");
         }
+        appViewModel = ViewModelProviders.of(this).get(AppViewModel.class);
+        updateModel();
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
-        appViewModel = ViewModelProviders.of(this).get(AppViewModel.class);
         setContentView(R.layout.start_activity);
         startDrawerLayoutAndMenu();
         startFragmentStart();
@@ -66,6 +70,17 @@ public class StartActivity extends AppCompatActivity
     @Override
     public void onStart() {
         super.onStart();
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        currentListID = sharedPref.getInt("ListID", 0);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("ListID", MODEL_VERSION);
+        editor.apply();
     }
 
     @Override
@@ -107,9 +122,7 @@ public class StartActivity extends AppCompatActivity
         } else if (id == R.id.nav_new_list) {
             fragmentClass = SingleListFragment.class;
         } else if (id == R.id.nav_settings) {
-            fragmentClass = null;
-        } else if(id == R.id.nav_last_list) {
-            fragmentClass = SingleListFragment.class;
+            fragmentClass = StartFragment.class;
         }
 
         try {
@@ -162,5 +175,51 @@ public class StartActivity extends AppCompatActivity
             tvEmail.setText(email);
         }
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void updateModel(){
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        MODEL_VERSION = sharedPref.getInt("Model version", 0);
+        int version = -1;
+        try {
+            version = new API.CheckModelVerison().execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        if(MODEL_VERSION != version){
+            Log.d("Model", "Update");
+            try {
+                JSONOperations.Helper helper = new API.UpdateDistances().execute().get();
+                appViewModel.deleteAllDistances();
+                for(int i = 0; i < helper.keysList.size(); i++){
+                    int index = appViewModel.selectProductID(helper.keysList.get(i));
+                    if(index == 0){
+                        appViewModel.insertNewProduct(new Product(helper.keysList.get(i)));
+                        Log.d("loop", helper.keysList.get(i));
+                    }
+                }
+                for(int i = 0; i < helper.distances.size(); i++){
+                    int id1 = appViewModel.selectProductID(helper.keysList.get(i));
+                    for(int j = 0; j < helper.distances.get(i).size(); j++){
+                        int id2 = appViewModel.selectProductID(helper.keysList.get(i + j + 1));
+                        appViewModel.insertNewDistance(new Distance(id1, id2, helper.distances.get(i).get(j)));
+                        Log.d("distances", String.valueOf(id1) + " " + id2 + " " + helper.distances.get(i).get(j));
+                    }
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            MODEL_VERSION = version;
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putInt("Model version", MODEL_VERSION);
+            editor.apply();
+        }
+        else{
+            Log.d("Model", "No update");
+        }
     }
 }

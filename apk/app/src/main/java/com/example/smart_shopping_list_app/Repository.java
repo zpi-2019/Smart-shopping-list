@@ -307,6 +307,23 @@ class Repository {
     }
 
 
+    void deleteAllDistances() { new DeleteAllDistancesAsync(distanceDao).execute(); }
+
+    private static class DeleteAllDistancesAsync extends AsyncTask<Void, Void, Void> {
+        private DistanceDao distanceDao;
+
+        DeleteAllDistancesAsync(DistanceDao distanceDao) {
+            this.distanceDao = distanceDao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            distanceDao.deleteAll();
+            return null;
+        }
+    }
+
+
 
     //////////////Select//////////////
 
@@ -440,6 +457,58 @@ class Repository {
     }
 
 
+    List<Integer> selectAllProductsID() {
+        List<Integer> result = null;
+        try {
+            result = new SelectAllProductsIDAsync(productDao).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private static class SelectAllProductsIDAsync extends AsyncTask<Void, Void, List<Integer>> {
+        private ProductDao productDao;
+
+        SelectAllProductsIDAsync(ProductDao productDao) {
+            this.productDao = productDao;
+        }
+
+        @Override
+        protected List<Integer> doInBackground(Void... voids) {
+            return productDao.selectAllProductsID();
+        }
+    }
+
+
+    String selectProductName(int id) {
+        String result = "";
+        try {
+            result = new SelectProductNameAsync(productDao).execute(id).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private static class SelectProductNameAsync extends AsyncTask<Integer, Void, String> {
+        private ProductDao productDao;
+
+        SelectProductNameAsync(ProductDao productDao) {
+            this.productDao = productDao;
+        }
+
+        @Override
+        protected String doInBackground(Integer... integers) {
+            return productDao.selectProductName(integers[0]);
+        }
+    }
+
+
     List<Group> selectAllGroups() {
         List<Group> list = null;
         try {
@@ -514,6 +583,32 @@ class Repository {
         @Override
         protected Integer doInBackground(String... strings) {
             return groupDao.getGroupByName(strings[0]);
+        }
+    }
+
+
+    List<Distance> selectAllDistances(){
+        List<Distance> list = null;
+        try {
+            list = new SelectAllDistancesAsync(distanceDao).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    private static class SelectAllDistancesAsync extends AsyncTask<Void, Void, List<Distance>>{
+        private DistanceDao distanceDao;
+
+        SelectAllDistancesAsync(DistanceDao distanceDao) {
+            this.distanceDao = distanceDao;
+        }
+
+        @Override
+        protected List<Distance> doInBackground(Void... voids) {
+            return distanceDao.selectAllDistances();
         }
     }
 

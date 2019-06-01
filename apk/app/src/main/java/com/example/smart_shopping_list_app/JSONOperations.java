@@ -1,30 +1,62 @@
 package com.example.smart_shopping_list_app;
 
 import android.util.JsonReader;
+import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-public class JSONOperations {
 
-    static void readDistances(InputStream responseBody, AppViewModel appViewModel) throws IOException {
+class JSONOperations {
+    static class Helper{
+        List<String> keysList;
+        List<List<Double>> distances;
+
+        Helper(List<String> keysList, List<List<Double>> distances){
+            this.distances = distances;
+            this.keysList = keysList;
+        }
+    }
+
+    static Helper readDistances(InputStream responseBody) throws IOException {
         InputStreamReader responseBodyReader = new InputStreamReader(responseBody, StandardCharsets.UTF_8);
-        JsonReader jsonReader = new JsonReader(responseBodyReader);
+        BufferedReader bufferedReader = new BufferedReader(responseBodyReader);
+        JSONObject jsonObject = null;
         try {
-            jsonReader.beginObject();
-        } catch (IOException e) {
+            jsonObject = new JSONObject(bufferedReader.readLine());
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-        while(jsonReader.hasNext()){
-            String key = jsonReader.nextName();
-            //first loop load all keys
+        List<String> keysList = new ArrayList<>();
+        List<List<Double>> distances = new ArrayList<>();
+        Iterator<String> keys = jsonObject.keys();
+        while(keys.hasNext()) {
+            String key = keys.next();
+            keysList.add(key);
+            ArrayList <Double> list = new ArrayList();
+            try {
+                JSONArray array = jsonObject.getJSONArray(key);
+                for (int i = 0; i < array.length(); i++) {
+                    list.add(array.getDouble(i));
+                }
+                distances.add(list);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
-        jsonReader.close();
+
+
+        return new Helper(keysList, distances);
     }
 
     static int readModelVersion(InputStream responseBody) throws IOException {

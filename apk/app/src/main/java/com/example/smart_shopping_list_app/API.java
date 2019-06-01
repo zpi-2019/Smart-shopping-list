@@ -1,21 +1,23 @@
 package com.example.smart_shopping_list_app;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+
 import javax.net.ssl.HttpsURLConnection;
 
-public class API {
-    private static String url = "https://smart-shopping-list-pwr-api.herokuapp.com/?fbclid=IwAR2_OJ6GMw9E2xOsIz1DRl2lpCEgS4QXP__IOvuOzgMl9-kJxZrZnIs06l4";
+class API {
+    private static String url = "https://smart-shopping-list-pwr-api.herokuapp.com/";
 
     private static class PullNewListsUpdate extends AsyncTask {
         @Override
         protected Object doInBackground(Object[] objects) {
-            URL httpEndpoint = null;
-            HttpsURLConnection connection = null;
+            URL httpEndpoint;
+            HttpsURLConnection connection;
             try {
                 httpEndpoint = new URL("");
                 connection = (HttpsURLConnection) httpEndpoint.openConnection();
@@ -29,7 +31,7 @@ public class API {
         }
     }
 
-    private static class PushNewListsUpdate extends AsyncTask {
+    static class PushNewListsUpdate extends AsyncTask {
 
         @Override
         protected Object doInBackground(Object[] objects) {
@@ -37,30 +39,48 @@ public class API {
         }
     }
 
-    private static class UpdateDistances extends AsyncTask {
-
+    static class UpdateDistances extends AsyncTask<Void, Void, JSONOperations.Helper> {
         @Override
-        protected Object doInBackground(Object[] objects) {
-            return null;
-        }
-    }
-
-    private static class CheckModelVerison extends AsyncTask {
-
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            URL httpEndpoint = null;
-            HttpsURLConnection connection = null;
+        protected JSONOperations.Helper doInBackground(Void... voids) {
+            URL httpEndpoint;
+            HttpsURLConnection connection;
+            JSONOperations.Helper helper = null;
             try {
-                httpEndpoint = new URL(url);
+                httpEndpoint = new URL(url + "model");
                 connection = (HttpsURLConnection) httpEndpoint.openConnection();
-                connection.setRequestMethod("");
+                if(connection.getResponseCode() == 200){
+                    helper = JSONOperations.readDistances(connection.getInputStream());
+                }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return null;
+            Log.d("Update", "Data to update prepared.");
+
+            return helper;
+        }
+    }
+
+    static class CheckModelVerison extends AsyncTask<Void, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            URL httpEndpoint;
+            HttpsURLConnection connection;
+            int version = 0;
+            try {
+                httpEndpoint = new URL(url + "model/version");
+                connection = (HttpsURLConnection) httpEndpoint.openConnection();
+                if(connection.getResponseCode() == 200){
+                    version = JSONOperations.readModelVersion(connection.getInputStream());
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return version;
         }
     }
 }

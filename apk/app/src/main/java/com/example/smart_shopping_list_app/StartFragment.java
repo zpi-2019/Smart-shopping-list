@@ -51,11 +51,13 @@ public class StartFragment extends Fragment {
         btLastList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SingleListFragment nextFrag = SingleListFragment.newInstance(StartActivity.currentListID);
-                Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame1, nextFrag, "findThisFragment")
-                        .addToBackStack(null)
-                        .commit();
+                if(StartActivity.currentListID != 0) {
+                    SingleListFragment nextFrag = SingleListFragment.newInstance(StartActivity.currentListID);
+                    Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.frame1, nextFrag, "findThisFragment")
+                            .addToBackStack(null)
+                            .commit();
+                }
             }
         });
         Button btListOfLists = view.findViewById(R.id.fragment_start_button_all_lists);

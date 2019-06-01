@@ -178,6 +178,12 @@ interface ProductDao {
 
     @Query("SELECT Max(IDProduct) FROM Product WHERE Name = :name")
     int selectProductID(String name);
+
+    @Query("SELECT Name FROM Product WHERE IDProduct = :id")
+    String selectProductName(int id);
+
+    @Query("SELECT IDProduct FROM Product")
+    List<Integer> selectAllProductsID();
 }
 
 
@@ -316,6 +322,12 @@ interface DistanceDao {
 
     @Update
     void update(Distance distance);
+
+    @Query("SELECT * FROM Distance")
+    List<Distance> selectAllDistances();
+
+    @Query("DELETE FROM Distance")
+    void deleteAll();
 }
 
 

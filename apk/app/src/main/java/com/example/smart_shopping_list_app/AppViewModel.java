@@ -57,6 +57,8 @@ public class AppViewModel extends AndroidViewModel {
 
     void deleteSingleGroupItem(int idGroupItem) { repository.deleteSingleGroupItem(idGroupItem);}
 
+    void deleteAllDistances() { repository.deleteAllDistances(); }
+
 
 
     //////////////Select//////////////
@@ -69,23 +71,23 @@ public class AppViewModel extends AndroidViewModel {
         return repository.getAllUsers();
     }
 
-    List<ListItem> getAllProductsFromList(int id) {
-        return repository.selectListItemJoinProduct(id);
-    }
+    List<ListItem> getAllProductsFromList(int id) { return repository.selectListItemJoinProduct(id); }
 
-    List<ListUserAndList> getAllUsersLists(int idUser) {
-        return repository.getAllUsersLists(idUser);
-    }
+    List<ListUserAndList> getAllUsersLists(int idUser) { return repository.getAllUsersLists(idUser); }
 
     int selectProductID(String name) { return repository.selectProductID(name); }
+
+    List<Integer> selectAllProductsID() { return repository.selectAllProductsID(); }
+
+    String selectProductName(int id) { return repository.selectProductName(id); }
 
     List<Group> selectAllGroups() { return repository.selectAllGroups(); }
 
     List<GroupItem> selectAllGroupItemFromGroup(int idGroup) { return repository.selectAllGroupItemFromGroup(idGroup); }
 
     int selectGroupID(String name) { return repository.selectGroupID(name); }
-    /* getAllDistances
-    */
+
+    List<Distance> selectAllDistances() { return repository.selectAllDistances(); }
 
 
     //////////////Update//////////////

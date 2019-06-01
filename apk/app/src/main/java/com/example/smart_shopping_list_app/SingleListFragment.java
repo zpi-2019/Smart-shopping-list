@@ -64,7 +64,7 @@ public class SingleListFragment extends Fragment {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddListItemFragment nextFrag = AddListItemFragment.newInstance();
+                AddListItemFragment nextFrag = AddListItemFragment.newInstance(adapter.getmValues());
                 Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
                         .replace(R.id.frame1, nextFrag, "findThisFragment")
                         .addToBackStack(null)
