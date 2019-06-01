@@ -78,7 +78,7 @@ public class SingleGroupFragment extends Fragment {
                 Toast.makeText(getActivity(), "Removed ", Toast.LENGTH_SHORT).show();
                 int position = viewHolder.getAdapterPosition();
                 int id = adapter.removeItem(position);
-                appViewModel.deleteSingleListItem(id);
+                appViewModel.deleteSingleGroupItem(id);
             }
         };
 

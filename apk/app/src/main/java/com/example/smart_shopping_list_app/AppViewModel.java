@@ -47,7 +47,7 @@ public class AppViewModel extends AndroidViewModel {
 
     void deleteUser(int idUser) { repository.deleteUser(idUser); }
 
-    void deleteSingleListItem(int idListItem) { repository.deleteSingleListItem(idListItem); }
+    void deleteSingleListItem(int idListItem, int idList) { repository.deleteSingleListItem(idListItem, idList); }
 
     void deleteListItemByIDList(int idList) { repository.deleteListItemByIDList(idList); }
 

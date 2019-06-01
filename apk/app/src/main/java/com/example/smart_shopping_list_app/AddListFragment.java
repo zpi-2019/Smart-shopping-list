@@ -57,7 +57,7 @@ public class AddListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (etName.getText() != null) {
-                    appViewModel.insertNewList(new Lists(etName.getText().toString(), Calendar.getInstance().getTimeInMillis(), Calendar.getInstance().getTimeInMillis()));
+                    appViewModel.insertNewList(new Lists(etName.getText().toString(), Calendar.getInstance().getTimeInMillis(), Calendar.getInstance().getTimeInMillis(), 1));
                     int listID = appViewModel.getListID(etName.getText().toString());
                     StartActivity.currentListID = listID;
                     appViewModel.insertNewListUser(new ListUser(listID, StartActivity.currentUserID));

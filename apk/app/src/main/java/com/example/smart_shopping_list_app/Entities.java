@@ -61,12 +61,14 @@ class Lists {
     public String Name;
     public Long CreateDate;
     public Long LastUpdateDate;
+    public int Version;
 
 
-    public Lists(String Name, Long CreateDate, Long LastUpdateDate){
+    public Lists(String Name, Long CreateDate, Long LastUpdateDate, int Version){
         this.Name = Name;
         this.CreateDate = CreateDate;
         this.LastUpdateDate = LastUpdateDate;
+        this.Version = Version;
     }
 }
 
@@ -83,6 +85,9 @@ interface ListsDao {
 
     @Update
     void update(Lists list);
+
+    @Query("UPDATE Lists SET Version = Version + 1 WHERE IDList = :id")
+    void updateDate(int id);
 }
 
 

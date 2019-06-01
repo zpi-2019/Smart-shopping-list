@@ -69,9 +69,10 @@ public class MySingleListRecyclerViewAdapter extends RecyclerView.Adapter<MySing
             @Override
             public void onClick(View v) {
                 int index = mValues.get(holder.getAdapterPosition()).IDListItem;
+                int listIndex = mValues.get(holder.getAdapterPosition()).IDList;
                 mValues.remove(holder.getAdapterPosition());
                 notifyItemRemoved(holder.getAdapterPosition());
-                appViewModel.deleteSingleListItem(index);
+                appViewModel.deleteSingleListItem(index, listIndex);
             }
         });
         holder.ivColor.setImageResource(getShape(item.color));

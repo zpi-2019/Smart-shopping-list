@@ -33,18 +33,21 @@ class Repository {
 
     //////////////Insert//////////////
 
-    void insertNewListItem(ListItem listItem) { new InsertListItemAsync(listItemDao).execute(listItem); }
+    void insertNewListItem(ListItem listItem) { new InsertListItemAsync(listItemDao, listsDao).execute(listItem); }
 
     private static class InsertListItemAsync extends AsyncTask<ListItem, Void, Void> {
         private ListItemDao listItemDao;
+        private ListsDao listsDao;
 
-        InsertListItemAsync(ListItemDao listItemDao) {
+        InsertListItemAsync(ListItemDao listItemDao, ListsDao listsDao) {
             this.listItemDao = listItemDao;
+            this.listsDao = listsDao;
         }
 
         @Override
         protected Void doInBackground(final ListItem... params){
             listItemDao.insert(params[0]);
+            listsDao.updateDate(params[0].IDList);
             return null;
         }
     }
@@ -67,18 +70,21 @@ class Repository {
     }
 
 
-    void insertNewListUser(ListUser listUser) { new InsertListUserAsync(listUserDao).execute(listUser);}
+    void insertNewListUser(ListUser listUser) { new InsertListUserAsync(listUserDao, listsDao).execute(listUser);}
 
     private static class InsertListUserAsync extends AsyncTask<ListUser, Void, Void> {
         private ListUserDao listUserDao;
+        private ListsDao listsDao;
 
-        InsertListUserAsync(ListUserDao listUserDao) {
+        InsertListUserAsync(ListUserDao listUserDao, ListsDao listsDao) {
             this.listUserDao = listUserDao;
+            this.listsDao = listsDao;
         }
 
         @Override
         protected Void doInBackground(ListUser... listUsers) {
             listUserDao.insert(listUsers[0]);
+            listsDao.updateDate(listUsers[0].IDList);
             return null;
         }
     }
@@ -223,34 +229,40 @@ class Repository {
     }
 
 
-    void deleteSingleListItem(int idListItem) { new DeleteSingleListItemAsync(listItemDao).execute(idListItem); }
+    void deleteSingleListItem(int idListItem, int idList) { new DeleteSingleListItemAsync(listItemDao, listsDao).execute(idListItem, idList); }
 
     private static class DeleteSingleListItemAsync extends AsyncTask<Integer, Void, Void> {
         private ListItemDao listItemDao;
+        private ListsDao listsDao;
 
-        DeleteSingleListItemAsync(ListItemDao listItemDao) {
+        DeleteSingleListItemAsync(ListItemDao listItemDao, ListsDao listsDao) {
             this.listItemDao = listItemDao;
+            this.listsDao = listsDao;
         }
 
         @Override
         protected Void doInBackground(Integer... integers) {
             listItemDao.delete(integers[0]);
+            listsDao.updateDate(integers[1]);
             return null;
         }
     }
 
-    void deleteListItemByIDList(int idList) { new DeleteListItemByIDListAsync(listItemDao).execute(idList); }
+    void deleteListItemByIDList(int idList) { new DeleteListItemByIDListAsync(listItemDao, listsDao).execute(idList); }
 
     private static class DeleteListItemByIDListAsync extends AsyncTask<Integer, Void, Void> {
         private ListItemDao listItemDao;
+        private ListsDao listsDao;
 
-        DeleteListItemByIDListAsync(ListItemDao listItemDao) {
+        DeleteListItemByIDListAsync(ListItemDao listItemDao, ListsDao listsDao) {
             this.listItemDao = listItemDao;
+            this.listsDao = listsDao;
         }
 
         @Override
         protected Void doInBackground(Integer... integers) {
             listItemDao.deleteByIDList(integers[0]);
+            listsDao.updateDate(integers[0]);
             return null;
         }
     }
@@ -615,18 +627,21 @@ class Repository {
 
     //////////////Update//////////////
 
-    void updateListItem(ListItem listItem) { new UpdateListItemAsync(listItemDao).execute(listItem); }
+    void updateListItem(ListItem listItem) { new UpdateListItemAsync(listItemDao, listsDao).execute(listItem); }
 
     private static class UpdateListItemAsync extends AsyncTask<ListItem, Void, Void> {
         private ListItemDao listItemDao;
+        private ListsDao listsDao;
 
-        UpdateListItemAsync(ListItemDao listItemDao) {
+        UpdateListItemAsync(ListItemDao listItemDao, ListsDao listsDao) {
             this.listItemDao = listItemDao;
+            this.listsDao = listsDao;
         }
 
         @Override
         protected Void doInBackground(ListItem... listItems) {
             listItemDao.update(listItems[0]);
+            listsDao.updateDate(listItems[0].IDList);
             return null;
         }
     }
@@ -644,6 +659,7 @@ class Repository {
         @Override
         protected Void doInBackground(Lists... lists) {
             listsDao.update(lists[0]);
+            listsDao.updateDate(lists[0].IDList);
             return null;
         }
     }

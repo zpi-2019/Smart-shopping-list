@@ -1,7 +1,6 @@
 package com.example.smart_shopping_list_app;
 
 import android.util.JsonReader;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,12 +71,14 @@ class JSONOperations {
         return version;
     }
 
-    static JSONObject write(Object object, AppViewModel appViewModel){
+    static JSONObject writeListsVersions(List<Lists> list){
         JSONObject postData = new JSONObject();
-        try{
-            postData.put("Key", "value");
-        } catch (JSONException e){
-            e.printStackTrace();
+        for(Lists item: list) {
+            try {
+                postData.put(String.valueOf(item.IDList), item.Version);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         return postData;
     }
