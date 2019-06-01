@@ -8,6 +8,7 @@ from flask_restful import Api
 import config as cfg
 from endpoints import Dists, Version, ShoppingList
 from recommendation import Recommender
+import firebase_admin
 
 
 class RESTApp(Flask):
@@ -18,6 +19,7 @@ class RESTApp(Flask):
         self._db = None
         self.recommender = None
         self.scheduler = None
+        self.firebase_app = None
 
     def _setup_rest_api(self):
         self._api = Api(self)
@@ -57,6 +59,10 @@ class RESTApp(Flask):
         self._api.add_resource(ShoppingList, cfg.endpoints['list_by_userToken'], resource_class_kwargs={'db': self._db}, endpoint='list_by_userToken')
         self._api.add_resource(ShoppingList, cfg.endpoints['list_by_listId'], resource_class_kwargs={'db': self._db}, endpoint='list_by_listId')
 
+    def _setup_firebase_app(self):
+        cred = firebase_admin.credentials.Certificate("serviceAccountKey.json")
+        self.firebase_app = firebase_admin.initialize_app(cred)
+
     def setup(self):
         self._setup_db()
         self._setup_rest_api()
@@ -64,6 +70,7 @@ class RESTApp(Flask):
         # self._setup_scheduler()
         # self._schedule_jobs()
         self._setup_endpoints()
+        self._setup_firebase_app()
 
 
 app = RESTApp(cfg.app['name'])
