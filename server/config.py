@@ -1,7 +1,7 @@
 from os import environ
 
 db = {
-    'url': 'mongodb://localhost:27017/ShoppingListDb',  #environ.get('MONGODB_CONNECTION_URL', None),
+    'url': environ.get('MONGODB_CONNECTION_URL', None),
     'local_url': 'mongodb://localhost:27017/ShoppingListDb'
 }
 
