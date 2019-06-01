@@ -28,10 +28,10 @@ class ShoppingList(Resource):
     def __init__(self, db):
         self.db = db
         self.parser = reqparse.RequestParser()
-        #self.parser.add_argument('date', type=lambda x: datetime.strptime(x, '%d.%m.%Y'), location='json')
+        #self.parser.add_argument('mod_date', type=lambda x: datetime.strptime(x, '%d.%m.%Y'), location='json')
         self.parser.add_argument('userToken', type=str, location='json')
         self.parser.add_argument('listId', type=int, location='json')
-        self.parser.add_argument('products', type=list, location='json')
+        self.parser.add_argument('items', type=list, location='json')
 
     def get(self, userToken=None, listId=None):
         records = []
@@ -48,19 +48,19 @@ class ShoppingList(Resource):
 
     def put(self, userToken, listId):
         data = self.parser.parse_args()
-        self.db.lists.update_one({'userId' : userToken, 'listId' : listId}, {'$set' : {'products' : data['products'], 'date': str(datetime.datetime.now())}})
+        self.db.lists.update_one({'userId' : userToken, 'listId' : listId}, {'$set' : {'items' : data['items'], 'mod_date': datetime.datetime.now()}})
         #return redirect(url_for('list', userID=userToken, listId=listId))
 
     def post(self):
         data = self.parser.parse_args()
 
         # TODO enable authentication once implemented in app
-        #firebase = fb.initialize_app(cfg.firebase_config)
-        #auth = firebase.auth()
-        #decoded_token = auth.verify_id_token(data['userToken'])
-        #uid = decoded_token['uid']
+        firebase = fb.initialize_app(cfg.firebase_config)
+        auth = firebase.auth()
+        decoded_token = auth.verify_id_token(data['userToken'])
+        uid = decoded_token['uid']
 
-        self.db.lists.insert({'userId' : data['userToken'], 'date': str(datetime.datetime.now()), 'products': data['products'], 'listId': data['listId']})
+        self.db.lists.insert({'userId' : uid, 'mod_date': datetime.datetime.now(), 'items': data['items'], 'listId': data['listId']})
         #return redirect(url_for('list'))
 
     def delete(self, userToken, listId):
