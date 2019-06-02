@@ -1,8 +1,13 @@
 from os import environ
+import json
 
 db = {
     'url': environ.get('MONGODB_CONNECTION_URL', None),
     'local_url': 'mongodb://localhost:27017/ShoppingListDb'
+}
+
+firebase = {
+    'cred': json.loads(environ.get('FIREBASE_SETUP_JSON', None))
 }
 
 app = {
