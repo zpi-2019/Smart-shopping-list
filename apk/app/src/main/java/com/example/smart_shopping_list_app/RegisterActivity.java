@@ -1,5 +1,6 @@
 package com.example.smart_shopping_list_app;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -34,7 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String email = inputEmail.getText().toString().trim();
+                final String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
 
                 if (TextUtils.isEmpty(email)) {
@@ -61,6 +62,9 @@ public class RegisterActivity extends AppCompatActivity {
                                     Toast.makeText(RegisterActivity.this, "Authentication failed." + task.getException(),
                                             Toast.LENGTH_SHORT).show();
                                 } else {
+                                    AppViewModel appViewModel = ViewModelProviders.of(RegisterActivity.this).get(AppViewModel.class);
+                                    appViewModel.insertNewUser(new User("", "", email));
+                                    StartActivity.currentUserID = appViewModel.selectUserId(email);
                                     startActivity(new Intent(RegisterActivity.this, StartActivity.class));
                                     finish();
                                 }

@@ -111,6 +111,12 @@ public class MySingleListRecyclerViewAdapter extends RecyclerView.Adapter<MySing
             ivColor = itemView.findViewById(R.id.single_list_item_imageView_color);
             ivColor.setImageResource(R.drawable.white_shape);
             ivStatus.setImageResource(R.drawable.white_shape);
+            foreground.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
         }
     }
 

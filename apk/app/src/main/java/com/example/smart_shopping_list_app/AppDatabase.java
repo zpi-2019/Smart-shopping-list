@@ -7,7 +7,6 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 @Database(entities = {User.class, Group.class, GroupItem.class, ListItem.class, Lists.class,
         ListUser.class, Product.class, Distance.class}, version = 1, exportSchema = false)

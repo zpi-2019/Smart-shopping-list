@@ -23,13 +23,9 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GetTokenResult;
-
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -166,16 +162,7 @@ public class StartActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            currentUser.getIdToken(true)
-                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                        public void onComplete(@NonNull Task<GetTokenResult> task) {
-                            if (task.isSuccessful()) {
-                                String idToken = task.getResult().getToken();
-                                Log.d("Token", idToken);
-                            }
-                        }
-                    });
-            currentUser.getIdToken(true);
+            currentUserID = appViewModel.selectUserId(currentUser.getEmail());
             String name = currentUser.getDisplayName();
             String email = currentUser.getEmail();
             Uri photoUrl = currentUser.getPhotoUrl();
@@ -192,7 +179,7 @@ public class StartActivity extends AppCompatActivity
     private void updateModel(){
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         MODEL_VERSION = sharedPref.getInt("Model version", 0);
-        int version = -1;
+        int version = 0;
         try {
             version = new API.CheckModelVerison().execute().get();
         } catch (InterruptedException e) {

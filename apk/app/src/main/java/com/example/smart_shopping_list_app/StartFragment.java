@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,8 +70,8 @@ public class StartFragment extends Fragment {
                         .commit();
             }
         });
-        FloatingActionButton fabAddNewList = view.findViewById(R.id.fragment_start_button_add_list);
-        fabAddNewList.setOnClickListener(new View.OnClickListener() {
+        Button btAddNewList = view.findViewById(R.id.fragment_start_button_create);
+        btAddNewList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddListFragment nextFrag = AddListFragment.newInstance();

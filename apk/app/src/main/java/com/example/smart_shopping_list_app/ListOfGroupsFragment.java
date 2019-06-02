@@ -7,11 +7,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.Objects;
 
@@ -40,10 +38,9 @@ public class ListOfGroupsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.list_of_groups_recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        adapter = new MyGroupRecyclerViewAdapter(appViewModel.selectAllGroups());
+        adapter = new MyGroupRecyclerViewAdapter(appViewModel.selectAllGroups(), appViewModel);
         recyclerView.setAdapter(adapter);
         initButton(view);
-        addItemTouchHelper();
         return view;
     }
 
@@ -61,25 +58,4 @@ public class ListOfGroupsFragment extends Fragment {
         });
     }
 
-    public void addItemTouchHelper() {
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                Toast.makeText(getActivity(), "Removed ", Toast.LENGTH_SHORT).show();
-                int position = viewHolder.getAdapterPosition();
-                int id = adapter.removeItem(position);
-                appViewModel.deleteGroupItemByIDGroup(id);
-                appViewModel.deleteGroup(id);
-            }
-        };
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-    }
 }

@@ -89,16 +89,12 @@ public class AddListItemFragment extends Fragment {
                     double amount = Double.parseDouble(etAmount.getText().toString());
                     String unit = spUnit.getSelectedItem().toString();
                     String color = spColor.getSelectedItem().toString();
-                    int productID = appViewModel.selectProductID(name);
-                    if (productID != 0)
-                        appViewModel.insertNewListItem(new ListItem(StartActivity.currentListID, name, StartActivity.Status.toBuy.toString(), amount, unit, color));
-                    else {
-                        appViewModel.insertNewListItem(new ListItem(StartActivity.currentListID, name, StartActivity.Status.toBuy.toString(), amount, unit, color));
-                    }
+                    ListItem item = new ListItem(StartActivity.currentListID, name, StartActivity.Status.toBuy.toString(), amount, unit, color);
+                    appViewModel.insertNewListItem(item);
                     etAmount.setText("");
                     etName.setText("");
+                    mValues.add(item);
                     adapter.setmValues(calculateDistances());
-                    //TODO:repair refresh adapter and set product name after click on item
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -109,7 +105,7 @@ public class AddListItemFragment extends Fragment {
         recyclerView = view.findViewById(R.id.add_item_recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 2));
-        adapter = new MyRecomRecyclerViewAdapter(calculateDistances());
+        adapter = new MyRecomRecyclerViewAdapter(calculateDistances(), etName);
         recyclerView.setAdapter(adapter);
     }
 

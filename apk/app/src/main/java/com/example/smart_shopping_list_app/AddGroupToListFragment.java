@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,16 +13,16 @@ import android.view.ViewGroup;
 
 import java.util.Objects;
 
-public class ListOfListsFragment extends Fragment {
-    AppViewModel appViewModel;
-    MyListsRecyclerViewAdapter adapter;
+
+public class AddGroupToListFragment extends Fragment {
     RecyclerView recyclerView;
+    AppViewModel appViewModel;
+    MyAddGroupRecyclerViewAdapter adapter;
 
-    public ListOfListsFragment() {
-    }
+    public AddGroupToListFragment() { }
 
-    public static ListOfListsFragment newInstance() {
-        return new ListOfListsFragment();
+    public static AddGroupToListFragment newInstance() {
+        return new AddGroupToListFragment();
     }
 
     @Override
@@ -35,18 +34,16 @@ public class ListOfListsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.list_of_lists_fragment, container, false);
-        Context context = view.getContext();
-        recyclerView = view.findViewById(R.id.list_of_lists_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new MyListsRecyclerViewAdapter(appViewModel);
-        adapter.setmValues(appViewModel.getAllUsersLists(StartActivity.currentUserID));
+        View view = inflater.inflate(R.layout.add_group_to_list, container, false);
+        recyclerView = view.findViewById(R.id.add_group_to_list_recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        adapter = new MyAddGroupRecyclerViewAdapter(appViewModel.selectAllGroups(), appViewModel);
         recyclerView.setAdapter(adapter);
-        FloatingActionButton fabAdd = view.findViewById(R.id.list_of_lists_button_add);
-        fabAdd.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.add_group_to_list_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddListFragment nextFrag = AddListFragment.newInstance();
+                SingleListFragment nextFrag = SingleListFragment.newInstance(StartActivity.currentListID);
                 Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
                         .replace(R.id.frame1, nextFrag, "findThisFragment")
                         .addToBackStack(null)
@@ -55,7 +52,6 @@ public class ListOfListsFragment extends Fragment {
         });
         return view;
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -67,4 +63,3 @@ public class ListOfListsFragment extends Fragment {
         super.onDetach();
     }
 }
-

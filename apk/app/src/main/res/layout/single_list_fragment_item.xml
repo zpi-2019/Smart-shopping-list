@@ -1,58 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.chauthai.swipereveallayout.SwipeRevealLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="100dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:mode="same_level"
+    app:mode="normal"
     app:dragEdge="left"
+    android:padding="2dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/single_list_item_view_background"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:visibility="visible">
+    android:id="@+id/single_list_item_view_background"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:visibility="visible">
 
+    <ImageButton
+        android:id="@+id/single_list_item_imageButton_delete"
+        android:layout_width="80dp"
+        android:layout_height="100dp"
+        android:scaleType="fitXY"
+        android:padding="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/single_list_item_imageButton_lack"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/delete_button" />
 
-        <ImageButton
-            android:id="@+id/single_list_item_imageButton_delete"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/single_list_item_imageButton_lack"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/delete_button" />
+    <ImageButton
+        android:id="@+id/single_list_item_imageButton_buy"
+        android:layout_width="80dp"
+        android:layout_height="100dp"
+        android:scaleType="fitCenter"
+        android:padding="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/buy_button" />
 
-        <ImageButton
-            android:id="@+id/single_list_item_imageButton_buy"
-            android:layout_width="74dp"
-            android:layout_height="80dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/buy_button" />
+    <ImageButton
+        android:id="@+id/single_list_item_imageButton_lack"
+        android:layout_width="80dp"
+        android:layout_height="100dp"
+        android:scaleType="fitXY"
+        android:padding="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/single_list_item_imageButton_buy"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/lack_button" />
 
-        <ImageButton
-            android:id="@+id/single_list_item_imageButton_lack"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/single_list_item_imageButton_buy"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/lack_button" />
-
-    </android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/single_list_item_view_foreground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
+        android:background="@mipmap/item"
         android:padding="10dp"
         android:visibility="visible">
 
@@ -74,8 +75,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:text="@string/Hello"
             android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline7"
             app:layout_constraintTop_toBottomOf="@+id/single_list_item_product_name" />
 
@@ -99,8 +102,8 @@
 
         <ImageView
             android:id="@+id/single_list_item_imageView_status"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline13"
@@ -109,13 +112,15 @@
 
         <ImageView
             android:id="@+id/single_list_item_imageView_color"
-            android:layout_width="0dp"
+            android:layout_width="10dp"
             android:layout_height="0dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline7"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/green_shape"/>
+            app:srcCompat="@drawable/green_shape" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline13"

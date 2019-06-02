@@ -625,6 +625,58 @@ class Repository {
     }
 
 
+    String selectUserEmail(int id){
+        String result = "";
+        try {
+            result = new SelectUserEmailAsync(userDao).execute(id).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private static class SelectUserEmailAsync extends AsyncTask<Integer, Void, String> {
+        private UserDao userDao;
+
+        SelectUserEmailAsync(UserDao userDao) {
+            this.userDao = userDao;
+        }
+
+        @Override
+        protected String doInBackground(Integer... integers) {
+            return userDao.getUserEmail(integers[0]);
+        }
+    }
+
+
+    int selectUserId(String email){
+        int result = 0;
+        try {
+            result = new SelectUserIdAsync(userDao).execute(email).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private static class SelectUserIdAsync extends AsyncTask<String, Void, Integer> {
+        private UserDao userDao;
+
+        SelectUserIdAsync(UserDao userDao) {
+            this.userDao = userDao;
+        }
+
+        @Override
+        protected Integer doInBackground(String... strings) {
+            return userDao.getUserID(strings[0]);
+        }
+    }
+
+
     //////////////Update//////////////
 
     void updateListItem(ListItem listItem) { new UpdateListItemAsync(listItemDao, listsDao).execute(listItem); }

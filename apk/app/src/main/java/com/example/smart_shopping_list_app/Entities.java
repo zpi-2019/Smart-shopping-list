@@ -50,6 +50,12 @@ interface UserDao {
 
     @Query("SELECT * FROM User")
     List<User> getAllUsers();
+
+    @Query("SELECT Email FROM User WHERE IDUser = :id")
+    String getUserEmail(int id);
+
+    @Query("SELECT IDUser FROM User WHERE Email =:email")
+    int getUserID(String email);
 }
 
 

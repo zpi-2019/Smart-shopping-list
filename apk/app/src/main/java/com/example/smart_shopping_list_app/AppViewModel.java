@@ -89,6 +89,10 @@ public class AppViewModel extends AndroidViewModel {
 
     List<Distance> selectAllDistances() { return repository.selectAllDistances(); }
 
+    String selectUserEmail(int id) { return repository.selectUserEmail(id); }
+
+    int selectUserId(String email) { return repository.selectUserId(email); }
+
 
     //////////////Update//////////////
 

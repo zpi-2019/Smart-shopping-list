@@ -1,20 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    app:cardCornerRadius="10dp"
-    app:cardElevation="1dp"
-    app:cardMaxElevation="1dp"
-    app:cardUseCompatPadding="true"
-    android:layout_height="wrap_content"
+<com.chauthai.swipereveallayout.SwipeRevealLayout
     android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:mode="normal"
+    app:dragEdge="left"
+    android:padding="2dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/view_foreground"
+        android:id="@+id/single_group_item_view_background"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <ImageButton
+            android:id="@+id/single_group_item_imageButton_delete"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="fitXY"
+            android:padding="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/delete_button" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/single_group_item_view_foreground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible"
-        android:background="@android:color/white"
+        android:background="@mipmap/item"
         android:padding="10dp">
 
         <TextView
@@ -42,4 +59,4 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/group_product_name"/>
     </android.support.constraint.ConstraintLayout>
-</android.support.v7.widget.CardView>
+</com.chauthai.swipereveallayout.SwipeRevealLayout>
