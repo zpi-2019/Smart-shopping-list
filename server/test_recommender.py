@@ -1,8 +1,10 @@
-from recommendation import Recommender
-from scipy.spatial.distance import pdist
-import numpy as np
 from unittest import TestCase
 from unittest.mock import Mock
+
+import numpy as np
+from scipy.spatial.distance import pdist
+
+from recommendation import Recommender
 
 
 class TestRecommender(TestCase):

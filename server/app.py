@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timedelta
 
 import firebase_admin
@@ -59,7 +60,7 @@ class RESTApp(Flask):
                                endpoint='list')
 
     def _setup_firebase_app(self):
-        cred = firebase_admin.credentials.Certificate(cfg.firebase['cred'])
+        cred = firebase_admin.credentials.Certificate(json.loads(cfg.firebase['cred']))
         self.firebase_app = firebase_admin.initialize_app(cred)
 
     def setup(self):

@@ -1,5 +1,4 @@
 from os import environ
-import json
 
 db = {
     'url': environ.get('MONGODB_CONNECTION_URL', None),
@@ -7,7 +6,7 @@ db = {
 }
 
 firebase = {
-    'cred': json.loads(environ.get('FIREBASE_SETUP_JSON', None))
+    'cred': environ.get('FIREBASE_SETUP_JSON', None)
 }
 
 app = {
