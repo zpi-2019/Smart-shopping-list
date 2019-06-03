@@ -1,5 +1,7 @@
+import json
 from datetime import datetime, timedelta
 
+import firebase_admin
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
 from flask_pymongo import PyMongo
@@ -8,7 +10,6 @@ from flask_restful import Api
 import config as cfg
 from endpoints import Dists, Version, ShoppingList
 from recommendation import Recommender
-import firebase_admin
 
 
 class RESTApp(Flask):
@@ -55,10 +56,11 @@ class RESTApp(Flask):
     def _setup_endpoints(self):
         self._api.add_resource(Dists, cfg.endpoints['model'], resource_class_kwargs={'rec': self.recommender})
         self._api.add_resource(Version, cfg.endpoints['version'], resource_class_kwargs={'rec': self.recommender})
-        self._api.add_resource(ShoppingList, cfg.endpoints['list'], resource_class_kwargs={'db': self._db}, endpoint='list')
+        self._api.add_resource(ShoppingList, cfg.endpoints['list'], resource_class_kwargs={'db': self._db},
+                               endpoint='list')
 
     def _setup_firebase_app(self):
-        cred = firebase_admin.credentials.Certificate("serviceAccountKey.json")
+        cred = firebase_admin.credentials.Certificate(json.loads(cfg.firebase['cred']))
         self.firebase_app = firebase_admin.initialize_app(cred)
 
     def setup(self):

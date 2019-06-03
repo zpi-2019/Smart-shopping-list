@@ -5,6 +5,10 @@ db = {
     'local_url': 'mongodb://localhost:27017/ShoppingListDb'
 }
 
+firebase = {
+    'cred': environ.get('FIREBASE_SETUP_JSON', None)
+}
+
 app = {
     'name': 'ShoppingListApi',
     'debug': True,
