@@ -41,11 +41,11 @@ class ShoppingList(Resource):
             uid = decoded_token['uid']
             if 'listId' in data:
                 listId = data['listId']
-                shopping_lists = self.db.lists.find({'userId' : uid, 'listId' : listId})
+                shopping_lists = self.db.lists.find({'userId' : uid, 'listId' : listId}, {'_id': 0})
             else:
-                shopping_lists = self.db.lists.find({'userId' : uid})
+                shopping_lists = self.db.lists.find({'userId' : uid}, {'_id': 0})
         else:
-            shopping_lists = self.db.lists.find()
+            shopping_lists = self.db.lists.find({}, {'_id': 0})
         for record in shopping_lists:
             records.append(record)
         return json.loads(json.dumps(records, default=json_util.default))  # prevents json structure from messing up
