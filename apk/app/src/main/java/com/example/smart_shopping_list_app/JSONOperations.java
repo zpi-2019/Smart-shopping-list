@@ -71,15 +71,44 @@ class JSONOperations {
         return version;
     }
 
-    static JSONObject writeListsVersions(List<Lists> list){
+    static JSONObject writeList(List<ListItem> list, String token){
         JSONObject postData = new JSONObject();
-        for(Lists item: list) {
+        try {
+            postData.put("userToken", token);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JSONArray items = new JSONArray();
+        for(ListItem item: list) {
             try {
-                postData.put(String.valueOf(item.IDList), item.Version);
+                JSONArray array = new JSONArray();
+                array.put(item.ProductName);
+                array.put(item.Amount);
+                array.put(item.Unit);
+                items.put(array);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+        try {
+            postData.put("items", items);
+            postData.put("listId", list.get(0).IDList);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return postData;
+    }
+
+    static void readLists(InputStream responseBody){
+        InputStreamReader responseBodyReader = new InputStreamReader(responseBody, StandardCharsets.UTF_8);
+        BufferedReader bufferedReader = new BufferedReader(responseBodyReader);
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(bufferedReader.readLine());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

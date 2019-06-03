@@ -1,5 +1,6 @@
 package com.example.smart_shopping_list_app;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -51,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = inputEmail.getText().toString();
+                final String email = inputEmail.getText().toString();
                 final String password = inputPassword.getText().toString();
 
                 if (TextUtils.isEmpty(email)) {
@@ -76,6 +77,13 @@ public class LoginActivity extends AppCompatActivity {
                                         Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                                     }
                                 } else {
+                                    AppViewModel appViewModel = ViewModelProviders.of(LoginActivity.this).get(AppViewModel.class);
+                                    int id = appViewModel.selectUserId(email);
+                                    if(id == 0){
+                                        appViewModel.insertNewUser(new User("", "", email));
+                                        id = appViewModel.selectUserId(email);
+                                    }
+                                    StartActivity.currentUserID = id;
                                     Intent intent = new Intent(LoginActivity.this, StartActivity.class);
                                     startActivity(intent);
                                     finish();

@@ -18,14 +18,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
+
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -93,22 +96,6 @@ public class StartActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.start, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
         Class fragmentClass = null;
@@ -162,6 +149,15 @@ public class StartActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
+            currentUser.getIdToken(true)
+                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                            if (task.isSuccessful()) {
+                                String idToken = task.getResult().getToken();
+                                Log.d("Token", idToken);
+                            }
+                        }
+                    });
             currentUserID = appViewModel.selectUserId(currentUser.getEmail());
             String name = currentUser.getDisplayName();
             String email = currentUser.getEmail();
