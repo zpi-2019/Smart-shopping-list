@@ -106,8 +106,8 @@ class Recommender:
         self._distance_buffer = None
 
     def start_training_cycle(self, db, scheduler):
-        scheduler.add_job(self._training_job, 'cron', day_of_week=cfg.model['train_week_day'],
-                          hour=cfg.model['train_hour'], args=[db])
+        scheduler.add_job(id='training_job', func=self._training_job, trigger='cron',
+                          day_of_week=cfg.model['train_week_day'], hour=cfg.model['train_hour'], args=[db])
 
     def _training_job(self, db):
         self.create_new_model(db)
@@ -123,11 +123,9 @@ class Recommender:
         id2word = self._glove.id2word
         hi = 0
 
-        for i in range(self._product_num):
-            name = id2word[i]
-
+        for i, name in id2word.items():
             lo = hi
-            hi = lo + self._product_num - (i + 1)
+            hi = lo + len(id2word) - (i + 1)
             dists = vector[lo:hi]
 
             formatted[name] = list(dists)
