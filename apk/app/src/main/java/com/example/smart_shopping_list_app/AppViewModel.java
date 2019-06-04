@@ -105,4 +105,9 @@ public class AppViewModel extends AndroidViewModel {
     void updateGroup(Group group) { repository.updateGroup(group); }
 
     void updateDistance(Distance distance) { repository.updateDistance(distance); }
+
+
+    void asyncCalc(MyRecomRecyclerViewAdapter adapter, List<ListItem> list) {
+        repository.asyncCalc(adapter, list);
+    }
 }

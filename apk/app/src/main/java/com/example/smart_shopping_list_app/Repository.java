@@ -2,7 +2,10 @@ package com.example.smart_shopping_list_app;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -764,6 +767,59 @@ class Repository {
         protected Void doInBackground(Distance... distances) {
             distanceDao.update(distances[0]);
             return null;
+        }
+    }
+
+
+    void asyncCalc(MyRecomRecyclerViewAdapter adapter, List<ListItem> mValues) { new AsyncCalc(adapter, productDao, distanceDao).execute(mValues);}
+
+
+    private static class AsyncCalc extends AsyncTask<List<ListItem>, Void, List<AddListItemFragment.Recommendations>>{
+        private MyRecomRecyclerViewAdapter adapter;
+        private ProductDao productDao;
+        private DistanceDao distanceDao;
+
+        AsyncCalc(MyRecomRecyclerViewAdapter adapter, ProductDao productDao, DistanceDao distanceDao){
+            this.adapter = adapter;
+            this.productDao = productDao;
+            this.distanceDao = distanceDao;
+        }
+
+
+        @Override
+        protected final List<AddListItemFragment.Recommendations> doInBackground(List<ListItem>... lists) {
+            List<Integer> itemsNotInList = productDao.selectAllProductsID();
+            List<Integer> itemsInList = new ArrayList<>();
+            List<AddListItemFragment.Recommendations> recom = new ArrayList<>();
+            List<Distance> distances = distanceDao.selectAllDistances();
+            for(ListItem item: lists[0]){
+                int id = productDao.selectProductID(item.ProductName);
+                if(id != 0) {
+                    itemsNotInList.remove(Integer.valueOf(id));
+                    itemsInList.add(id);
+                }
+            }
+
+            for(int id: itemsNotInList){
+                double sum = 0;
+                for(Distance distance : distances){
+                    if(id == distance.IDProduct1 && itemsInList.contains(distance.IDProduct2)){
+                        sum += distance.Distance;
+                    }
+                    if(id == distance.IDProduct2 && itemsInList.contains(distance.IDProduct1)){
+                        sum += distance.Distance;
+                    }
+                }
+                recom.add(new AddListItemFragment.Recommendations(productDao.selectProductName(id), sum));
+            }
+            Collections.sort(recom);
+            return recom;
+        }
+
+        @Override
+        protected void onPostExecute(List<AddListItemFragment.Recommendations> list) {
+            adapter.setmValues(list);
+            adapter.notifyDataSetChanged();
         }
     }
 }

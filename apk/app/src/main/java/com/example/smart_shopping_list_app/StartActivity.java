@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -188,19 +189,20 @@ public class StartActivity extends AppCompatActivity
             try {
                 JSONOperations.Helper helper = new API.UpdateDistances().execute().get();
                 appViewModel.deleteAllDistances();
+                HashMap<String, Integer> ids = new HashMap<>();
                 for(int i = 0; i < helper.keysList.size(); i++){
                     int index = appViewModel.selectProductID(helper.keysList.get(i));
                     if(index == 0){
                         appViewModel.insertNewProduct(new Product(helper.keysList.get(i)));
-                        Log.d("loop", helper.keysList.get(i));
                     }
+                    ids.put(helper.keysList.get(i), appViewModel.selectProductID(helper.keysList.get(i)));
                 }
                 for(int i = 0; i < helper.distances.size(); i++){
-                    int id1 = appViewModel.selectProductID(helper.keysList.get(i));
+                    int id1 = ids.get(helper.keysList.get(i));
                     for(int j = 0; j < helper.distances.get(i).size(); j++){
-                        int id2 = appViewModel.selectProductID(helper.keysList.get(i + j + 1));
+                        int id2 = ids.get(helper.keysList.get(i + j + 1));
                         appViewModel.insertNewDistance(new Distance(id1, id2, helper.distances.get(i).get(j)));
-                        Log.d("distances", String.valueOf(id1) + " " + id2 + " " + helper.distances.get(i).get(j));
+                        Log.d("Load", id1 + " " + id2);
                     }
                 }
             } catch (InterruptedException e) {
