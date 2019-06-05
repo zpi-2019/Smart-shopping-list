@@ -94,9 +94,9 @@ class ShoppingListShare(Resource):
 
     def post(self):  # add sharedWithEmail to sharedWithEmails for user with uid from userToken and a specific listId
         data = self.parser.parse_args()
-        #decoded_token = auth.verify_id_token(data['userToken'])
-        #uid = decoded_token['uid']
-        uid = data['userToken']
+        decoded_token = auth.verify_id_token(data['userToken'])
+        uid = decoded_token['uid']
+        #uid = data['userToken']
 
         if ('listId' in data) and ('sharedWithEmail' in data):
             shopping_list = self.db.lists.find_one({'userId': uid, 'listId': data['listId']})

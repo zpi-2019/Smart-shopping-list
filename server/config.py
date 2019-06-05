@@ -20,7 +20,8 @@ app = {
 endpoints = {
     'model': '/model/',
     'version': '/model/version',
-    'list': '/lists/'
+    'list': '/lists/',
+    'list_share': '/lists/share/'
 }
 
 model = {

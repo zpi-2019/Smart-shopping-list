@@ -8,7 +8,7 @@ from flask_pymongo import PyMongo
 from flask_restful import Api
 
 import config as cfg
-from endpoints import Dists, Version, ShoppingList
+from endpoints import Dists, Version, ShoppingList, ShoppingListShare
 from recommendation import Recommender
 
 
@@ -59,6 +59,8 @@ class RESTApp(Flask):
         self._api.add_resource(Version, cfg.endpoints['version'], resource_class_kwargs={'rec': self.recommender})
         self._api.add_resource(ShoppingList, cfg.endpoints['list'], resource_class_kwargs={'db': self._db},
                                endpoint='list')
+        self._api.add_resource(ShoppingListShare, cfg.endpoints['list_share'], resource_class_kwargs={'db': self._db},
+                               endpoint='list_share')
 
     def _setup_firebase_app(self):
         cred = firebase_admin.credentials.Certificate(json.loads(cfg.firebase['cred']))
