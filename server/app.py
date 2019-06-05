@@ -39,7 +39,7 @@ class RESTApp(Flask):
         date = c_date - delta
 
         data = self._db.lists.find({'mod_date': {'$lt': date}}, {'_id': 0})
-        clean_data = [{'date': rec['mod_date'], 'list': rec['list']} for rec in data]
+        clean_data = [{'date': rec['mod_date'], 'list': rec['items']} for rec in data]
 
         self._db.archive.insert_many(clean_data)
         self._db.lists.delete_many({'mod_date': {'$lt': date}})
