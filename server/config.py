@@ -24,11 +24,11 @@ endpoints = {
 }
 
 model = {
-    'product_num': 6,
+    'product_num': 500,
     'learning_rate': 0.05,
     'x_max': 100,
     'alpha': 0.75,
-    'v_size': 100,
+    'v_size': 250,
     'iterations': 25,
     'def_version': 1,
     'train_week_day': 'mon',

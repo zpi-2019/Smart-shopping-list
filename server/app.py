@@ -2,8 +2,8 @@ import json
 from datetime import datetime, timedelta
 
 import firebase_admin
-from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
+from flask_apscheduler import APScheduler
 from flask_pymongo import PyMongo
 from flask_restful import Api
 
@@ -30,7 +30,8 @@ class RESTApp(Flask):
         self._db = PyMongo(self).db
 
     def _setup_scheduler(self):
-        self.scheduler = BackgroundScheduler()
+        self.scheduler = APScheduler()
+        self.scheduler.init_app(self)
         self.scheduler.start()
 
     def _archive_job(self):
@@ -45,9 +46,9 @@ class RESTApp(Flask):
         self._db.lists.delete_many({'mod_date': {'$lt': date}})
 
     def _schedule_jobs(self):
-        self.recommender.start_training_cycle(self._db)
-        self.scheduler.add_job(self._archive_job, 'cron', day_of_week=cfg.app['archive_week_day'],
-                               hour=cfg.app['archive_hour'])
+        self.recommender.start_training_cycle(self._db, self.scheduler)
+        self.scheduler.add_job(id='archive_job', func=self._archive_job, trigger='cron',
+                               day_of_week=cfg.app['archive_week_day'], hour=cfg.app['archive_hour'])
 
     def _setup_recommendations(self):
         self.recommender = Recommender(cfg.model['product_num'])
@@ -83,4 +84,4 @@ def hello_world():
 
 
 if __name__ == '__main__':
-    app.run(debug=cfg.app['debug'])
+    app.run(debug=cfg.app['debug'], use_reloader=False)
