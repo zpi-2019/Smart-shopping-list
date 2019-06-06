@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_all_lists"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/all_shopping_lists" />
+        <item
+            android:id="@+id/nav_new_list"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/create_new_shopping_list" />
+        <item
+            android:id="@+id/nav_groups"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/groups_of_products" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/settings" />
+    </group>
+</menu>

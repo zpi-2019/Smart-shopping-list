@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "366606870540",
+    "firebase_url": "https://apkfirebaseproject-78f8d.firebaseio.com",
+    "project_id": "apkfirebaseproject-78f8d",
+    "storage_bucket": "apkfirebaseproject-78f8d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366606870540:android:1ee0a8c3560c28b5",
+        "android_client_info": {
+          "package_name": "com.example.smart_shopping_list_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "366606870540-buiv624fu57s1e0gp6ai39d9015l5m3d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.smart_shopping_list_app",
+            "certificate_hash": "c778d586acfdf452eaae6550a9491af11b666a42"
+          }
+        },
+        {
+          "client_id": "366606870540-s8saj3nafhgkae876bqaepscprbua5ok.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUdvd-90w6lTSuUcvAAAwBmIV_IaoCoNU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "366606870540-s8saj3nafhgkae876bqaepscprbua5ok.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
