@@ -1,59 +1,89 @@
-from flask import Flask, jsonify, request, redirect, url_for
-from flask_restful import Resource, Api, reqparse
+import json
+from datetime import datetime, timedelta
+
+import firebase_admin
+from flask import Flask
+from flask_apscheduler import APScheduler
 from flask_pymongo import PyMongo
-from bson.json_util import dumps
-from os import environ
+from flask_restful import Api
 
-app = Flask("It's alive!")
-api = Api(app)
-# app.config["MONGO_URI"] = "mongodb://localhost:27017/ShoppingListDb"
-app.config["MONGO_URI"] = environ['MONGODB_CONNECTION_URL']
-mongo = PyMongo(app)
-
-parser = reqparse.RequestParser()
-parser.add_argument('products', action='append')
-parser.add_argument('userID', type=int)
+import config as cfg
+from endpoints import Dists, Version, ShoppingList, ShoppingListShare
+from recommendation import Recommender
 
 
-class ApiServer(Resource):
-    def get(self):
-        data = mongo.db.shopping_lists.find_one({"_id": 1})
-        return data
+class RESTApp(Flask):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self._api = None
+        self._db = None
+        self.recommender = None
+        self.scheduler = None
+        self.firebase_app = None
+
+    def _setup_rest_api(self):
+        self._api = Api(self)
+
+    def _setup_db(self):
+        self.config['MONGO_URI'] = cfg.db['url']
+        self._db = PyMongo(self).db
+
+    def _setup_scheduler(self):
+        self.scheduler = APScheduler()
+        self.scheduler.init_app(self)
+        self.scheduler.start()
+
+    def _archive_job(self):
+        c_date = datetime.now()
+        delta = timedelta(days=cfg.app['archive_min_age_days'])
+        date = c_date - delta
+
+        data = self._db.lists.find({'mod_date': {'$lt': date}}, {'_id': 0})
+        clean_data = [{'date': rec['mod_date'], 'list': rec['items']} for rec in data]
+
+        self._db.archive.insert_many(clean_data)
+        self._db.lists.delete_many({'mod_date': {'$lt': date}})
+
+    def _schedule_jobs(self):
+        self.recommender.start_training_cycle(self._db, self.scheduler)
+        self.scheduler.add_job(id='archive_job', func=self._archive_job, trigger='cron',
+                               day_of_week=cfg.app['archive_week_day'], hour=cfg.app['archive_hour'])
+
+    def _setup_recommendations(self):
+        self.recommender = Recommender(cfg.model['product_num'])
+        self.recommender.sync_with_db(self._db)
+
+    def _setup_endpoints(self):
+        self._api.add_resource(Dists, cfg.endpoints['model'], resource_class_kwargs={'rec': self.recommender})
+        self._api.add_resource(Version, cfg.endpoints['version'], resource_class_kwargs={'rec': self.recommender})
+        self._api.add_resource(ShoppingList, cfg.endpoints['list'], resource_class_kwargs={'db': self._db},
+                               endpoint='list')
+        self._api.add_resource(ShoppingListShare, cfg.endpoints['list_share'], resource_class_kwargs={'db': self._db},
+                               endpoint='list_share')
+
+    def _setup_firebase_app(self):
+        cred = firebase_admin.credentials.Certificate(json.loads(cfg.firebase['cred']))
+        self.firebase_app = firebase_admin.initialize_app(cred)
+
+    def setup(self):
+        self._setup_db()
+        self._setup_rest_api()
+        self._setup_recommendations()
+        # self._setup_scheduler()
+        # self._schedule_jobs()
+        self._setup_endpoints()
+        self._setup_firebase_app()
 
 
-class ShoppingList(Resource):
-    def get(self, userID=None):
-        if userID:
-            shopping_lists = mongo.db.List.find({'userID': userID})
-        else:
-            shopping_lists = mongo.db.List.find()
-        return dumps(shopping_lists)
-
-    def put(self, userID):  # TODO replace userID with unique attribute (possibly ObjectID)
-        args = parser.parse_args()
-        mongo.db.List.update_one({'userID': userID}, {'$set': {'products': args['products']}})
-        return redirect(url_for('userID', userID=userID))
-
-    def post(self):
-        args = parser.parse_args()
-        mongo.db.List.insert(args)
-        return redirect(url_for('shopping_lists'))
-
-    def delete(self, userID):  # TODO replace userID with unique attribute (possibly ObjectID)
-        mongo.db.List.remove({'userID': userID})
+app = RESTApp(cfg.app['name'])
+app.setup()
 
 
-api.add_resource(ApiServer, '/api/')
-api.add_resource(ShoppingList, '/shopping_lists/', endpoint='shopping_lists')
-api.add_resource(ShoppingList, '/shopping_lists/<int:userID>/', endpoint='userID')
-
-
-@app.route('/')
+@RESTApp.route(app, '/')
 def hello_world():
     return 'Greetings'
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
-    # host=0.0.0.0 if accessing server from outside localhost but inside local network
-    # host=10.0.2.2 for Android AVD
+    app.run(debug=cfg.app['debug'], use_reloader=False)

@@ -1,9 +1,9 @@
 import logging
 from collections import Counter
-from math import log
 from random import shuffle
 
 import numpy as np
+from math import log
 from matplotlib import pyplot as plt
 from scipy import sparse
 from scipy.spatial.distance import pdist
@@ -321,7 +321,6 @@ class GloVe:
 
 
 if __name__ == '__main__':
-    pass
     test_lists = [
         ['owoce', 'szynka'],
         ['owoce', 'szynka'],
@@ -362,7 +361,6 @@ if __name__ == '__main__':
     ]
     shuffle(test_lists)
 
-    # TODO tune parameters
     glove = GloVe(test_lists, learning_rate=0.001, vector_size=10, iterations=2000)
 
     glove.setup()
