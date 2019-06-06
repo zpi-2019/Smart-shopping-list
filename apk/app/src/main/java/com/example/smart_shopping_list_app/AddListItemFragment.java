@@ -91,9 +91,9 @@ public class AddListItemFragment extends Fragment {
                     String color = spColor.getSelectedItem().toString();
                     ListItem item = new ListItem(StartActivity.currentListID, name, StartActivity.Status.toBuy.toString(), amount, unit, color);
                     appViewModel.insertNewListItem(item);
+                    mValues.add(item);
                     etAmount.setText("");
                     etName.setText("");
-                    mValues.add(item);
                     appViewModel.asyncCalc(adapter, mValues);
                 }
             }
@@ -103,7 +103,7 @@ public class AddListItemFragment extends Fragment {
     private void initRecyclerView(View view) {
         recyclerView = view.findViewById(R.id.add_item_recyclerView);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 2));
+        recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
         adapter = new MyRecomRecyclerViewAdapter(new ArrayList(), etName);
         recyclerView.setAdapter(adapter);
     }
@@ -115,9 +115,9 @@ public class AddListItemFragment extends Fragment {
 
     private void initSpinner(View view){
         spUnit = view.findViewById(R.id.add_item_spinner_unit);
-        spUnit.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.support_simple_spinner_dropdown_item, StartActivity.Unit.values()));
+        spUnit.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.spinner_item, StartActivity.Unit.values()));
         spColor = view.findViewById(R.id.add_item_spinner_color);
-        spColor.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.support_simple_spinner_dropdown_item, StartActivity.GroupColors.values()));
+        spColor.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.spinner_item, StartActivity.GroupColors.values()));
     }
 
     static class Recommendations implements Comparable<Recommendations>{

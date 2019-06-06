@@ -195,6 +195,9 @@ interface ProductDao {
 
     @Query("SELECT IDProduct FROM Product")
     List<Integer> selectAllProductsID();
+
+    @Query("SELECT * FROM Product")
+    List<Product> selectAllProducts();
 }
 
 
@@ -336,6 +339,9 @@ interface DistanceDao {
 
     @Query("SELECT * FROM Distance")
     List<Distance> selectAllDistances();
+
+    @Query("SELECT * FROM Distance WHERE IDProduct1 =:id OR IDProduct2 =:id")
+    List<Distance> selectDistancesWithID(int id);
 
     @Query("DELETE FROM Distance")
     void deleteAll();

@@ -31,7 +31,7 @@
         android:id="@+id/list_of_lists_item_view_foreground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@mipmap/item"
+        android:background="@color/cardview_dark_background"
         android:visibility="visible">
 
         <TextView
@@ -41,7 +41,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:textSize="24sp"
-            android:textColor="@color/main_font_color"
+            android:textColor="#FFFF"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,6 +52,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="0dp"
             android:layout_marginBottom="8dp"
+            android:textColor="#FFFF"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/list_title"
             app:layout_constraintBottom_toBottomOf="parent"

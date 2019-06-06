@@ -4,9 +4,19 @@
     android:layout_height="100dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:mode="normal"
-    app:dragEdge="left"
+    app:dragEdge="right"
     android:padding="2dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="1dp"
+        app:cardMaxElevation="1dp"
+        app:cardUseCompatPadding="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
     <android.support.constraint.ConstraintLayout
     android:id="@+id/single_list_item_view_background"
@@ -17,7 +27,7 @@
     <ImageButton
         android:id="@+id/single_list_item_imageButton_delete"
         android:layout_width="80dp"
-        android:layout_height="100dp"
+        android:layout_height="0dp"
         android:scaleType="fitXY"
         android:padding="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -47,14 +57,24 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/lack_button" />
 
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="1dp"
+        app:cardMaxElevation="1dp"
+        app:cardUseCompatPadding="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/single_list_item_view_foreground"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@mipmap/item"
-        android:padding="10dp"
+        android:layout_height="match_parent"
+        android:background="@color/cardview_dark_background"
         android:visibility="visible">
 
         <TextView
@@ -64,7 +84,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/Hello"
-            android:textColor="@color/main_font_color"
+            android:textColor="#FFFF"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="@+id/guideline7"
             app:layout_constraintTop_toTopOf="parent" />
@@ -76,6 +96,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:textColor="#FFFF"
             android:text="@string/Hello"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -104,6 +125,7 @@
             android:id="@+id/single_list_item_imageView_status"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline13"
@@ -114,8 +136,8 @@
             android:id="@+id/single_list_item_imageView_color"
             android:layout_width="10dp"
             android:layout_height="0dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline7"
             app:layout_constraintStart_toStartOf="parent"
@@ -130,4 +152,5 @@
             app:layout_constraintGuide_percent="0.9" />
 
     </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
 </com.chauthai.swipereveallayout.SwipeRevealLayout>

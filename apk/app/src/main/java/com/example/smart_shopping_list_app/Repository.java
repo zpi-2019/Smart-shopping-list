@@ -2,11 +2,14 @@ package com.example.smart_shopping_list_app;
 
 import android.app.Application;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 
 class Repository {
@@ -779,38 +782,50 @@ class Repository {
         private ProductDao productDao;
         private DistanceDao distanceDao;
 
-        AsyncCalc(MyRecomRecyclerViewAdapter adapter, ProductDao productDao, DistanceDao distanceDao){
+        AsyncCalc(MyRecomRecyclerViewAdapter adapter, ProductDao productDao, DistanceDao distanceDao) {
             this.adapter = adapter;
             this.productDao = productDao;
             this.distanceDao = distanceDao;
         }
 
+        boolean containsItem(List<ListItem> list, String name){
+            for(ListItem item: list){
+                if(item.ProductName.equals(name))
+                    return true;
+            }
+            return false;
+        }
+
+        String returnName(int id, List<Product> allProducts){
+            for(Product item: allProducts){
+                if(item.IDProduct == id)
+                    return item.Name;
+            }
+            return "";
+        }
 
         @Override
         protected final List<AddListItemFragment.Recommendations> doInBackground(List<ListItem>... lists) {
-            List<Integer> itemsNotInList = productDao.selectAllProductsID();
-            List<Integer> itemsInList = new ArrayList<>();
+            List<Product> allProducts = productDao.selectAllProducts();
+            HashMap<Integer, Double> distancesSum = new HashMap<>();
             List<AddListItemFragment.Recommendations> recom = new ArrayList<>();
-            List<Distance> distances = distanceDao.selectAllDistances();
+            for(Product item: allProducts){
+                if(!containsItem(lists[0], item.Name))
+                    distancesSum.put(item.IDProduct, 0.0);
+            }
             for(ListItem item: lists[0]){
-                int id = productDao.selectProductID(item.ProductName);
-                if(id != 0) {
-                    itemsNotInList.remove(Integer.valueOf(id));
-                    itemsInList.add(id);
+                List<Distance> distances = distanceDao.selectDistancesWithID(productDao.selectProductID(item.ProductName));
+                for(Distance item2: distances){
+                    if(distancesSum.containsKey(item2.IDProduct1))
+                        distancesSum.put(item2.IDProduct1, distancesSum.get(item2.IDProduct1) + item2.Distance);
+                    if(distancesSum.containsKey(item2.IDProduct2))
+                        distancesSum.put(item2.IDProduct2, distancesSum.get(item2.IDProduct2) + item2.Distance);
                 }
             }
 
-            for(int id: itemsNotInList){
-                double sum = 0;
-                for(Distance distance : distances){
-                    if(id == distance.IDProduct1 && itemsInList.contains(distance.IDProduct2)){
-                        sum += distance.Distance;
-                    }
-                    if(id == distance.IDProduct2 && itemsInList.contains(distance.IDProduct1)){
-                        sum += distance.Distance;
-                    }
-                }
-                recom.add(new AddListItemFragment.Recommendations(productDao.selectProductName(id), sum));
+            for (Object o : distancesSum.entrySet()) {
+                Map.Entry pair = (Map.Entry) o;
+                recom.add(new AddListItemFragment.Recommendations(returnName((Integer) pair.getKey(), allProducts), (Double) pair.getValue()));
             }
             Collections.sort(recom);
             return recom;

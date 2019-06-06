@@ -2,7 +2,7 @@
     <string name="app_name">Smart-shopping-list-app</string>
     <string name="last_list">Ostatnia lista</string>
     <string name="all_lists">Wszystkie listy</string>
-    <string name="Hello">Witaj</string>
+    <string name="Hello">Hello</string>
     <string name="title_activity_single_list">SingleList</string>
     <string name="delete">Usuń</string>
     <string name="undo">Cofnij</string>
@@ -42,4 +42,5 @@
     <string name="use_list_again">Use list again</string>
     <string name="refresh_list">Refresh list</string>
     <string name="save_as_group">Save as group</string>
+    <string name="smart_shopping_list">Smart shopping list</string>
 </resources>

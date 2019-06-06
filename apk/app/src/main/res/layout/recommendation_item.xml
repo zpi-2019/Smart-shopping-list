@@ -11,17 +11,16 @@
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/recommendation_item_layout"
-        android:layout_width="150dp"
-        android:layout_height="150dp">
+        android:layout_width="120dp"
+        android:layout_height="70dp"
+        android:background="@color/cardview_dark_background">
 
         <TextView
             android:id="@+id/recommendation_item_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:textColor="#FFFF"
+            android:gravity="center"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
