@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -91,9 +91,9 @@ public class MySingleListRecyclerViewAdapter extends RecyclerView.Adapter<MySing
         TextView tvAmount;
         ConstraintLayout foreground;
         ConstraintLayout background;
-        ImageButton btBuy;
-        ImageButton btDelete;
-        ImageButton btLack;
+        Button btBuy;
+        Button btDelete;
+        Button btLack;
         ImageView ivStatus;
         ImageView ivColor;
         int idListItem;

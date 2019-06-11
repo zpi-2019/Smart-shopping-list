@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Objects;
@@ -66,6 +67,10 @@ public class AddListFragment extends Fragment {
                             .replace(R.id.frame1, nextFrag, "findThisFragment")
                             .addToBackStack(null)
                             .commit();
+                    Toast.makeText(v.getContext(), "List created. Now you can add items.", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(v.getContext(), "Please enter name.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

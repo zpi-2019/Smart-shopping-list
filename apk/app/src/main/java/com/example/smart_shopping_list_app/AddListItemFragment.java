@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,13 +91,17 @@ public class AddListItemFragment extends Fragment {
                     double amount = Double.parseDouble(etAmount.getText().toString());
                     String unit = spUnit.getSelectedItem().toString();
                     String color = spColor.getSelectedItem().toString();
+                    Log.d("String", color);
                     ListItem item = new ListItem(StartActivity.currentListID, name, StartActivity.Status.toBuy.toString(), amount, unit, color);
                     appViewModel.insertNewListItem(item);
                     mValues.add(item);
                     etAmount.setText("");
                     etName.setText("");
                     appViewModel.asyncCalc(adapter, mValues);
+                    Toast.makeText(v.getContext(), name + " added.", Toast.LENGTH_SHORT).show();
                 }
+                else
+                    Toast.makeText(v.getContext(), "Please enter name and amount.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -104,7 +110,7 @@ public class AddListItemFragment extends Fragment {
         recyclerView = view.findViewById(R.id.add_item_recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
-        adapter = new MyRecomRecyclerViewAdapter(new ArrayList(), etName);
+        adapter = new MyRecomRecyclerViewAdapter(new ArrayList<Recommendations>(), etName);
         recyclerView.setAdapter(adapter);
     }
 
@@ -115,9 +121,9 @@ public class AddListItemFragment extends Fragment {
 
     private void initSpinner(View view){
         spUnit = view.findViewById(R.id.add_item_spinner_unit);
-        spUnit.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.spinner_item, StartActivity.Unit.values()));
+        spUnit.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.spinner_item2, StartActivity.Unit.values()));
         spColor = view.findViewById(R.id.add_item_spinner_color);
-        spColor.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.spinner_item, StartActivity.GroupColors.values()));
+        spColor.setAdapter(new SpinnerAdapter(Objects.requireNonNull(getContext())));
     }
 
     static class Recommendations implements Comparable<Recommendations>{

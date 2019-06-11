@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AppViewModel extends AndroidViewModel {
@@ -36,6 +37,7 @@ public class AppViewModel extends AndroidViewModel {
 
     void insertNewDistance(Distance distance) { repository.insertNewDistance(distance); }
 
+    void insertNewDistancesList(List<Distance> list) {repository.insertNewDistancesList(list);}
 
     //////////////Delete//////////////
 

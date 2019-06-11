@@ -43,4 +43,7 @@
     <string name="refresh_list">Refresh list</string>
     <string name="save_as_group">Save as group</string>
     <string name="smart_shopping_list">Smart shopping list</string>
+    <string name="lack">Lack</string>
+    <string name="bought">Bought</string>
+    <string name="remove">Remove</string>
 </resources>

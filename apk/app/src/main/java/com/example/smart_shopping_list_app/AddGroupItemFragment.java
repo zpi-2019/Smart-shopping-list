@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.Objects;
 
@@ -73,6 +74,7 @@ public class AddGroupItemFragment extends Fragment {
                     appViewModel.insertNewGroupItem(new GroupItem(currentGroupID, name, amount, unit));
                     etAmount.setText("");
                     etName.setText("");
+                    Toast.makeText(v.getContext(), name + " added.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -85,6 +87,6 @@ public class AddGroupItemFragment extends Fragment {
 
     private void initSpinner(View view){
         spUnit = view.findViewById(R.id.add_group_spinner_unit);
-        spUnit.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.support_simple_spinner_dropdown_item, StartActivity.Unit.values()));
+        spUnit.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.spinner_item2, StartActivity.Unit.values()));
     }
 }

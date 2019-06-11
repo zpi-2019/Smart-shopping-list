@@ -3,8 +3,6 @@ package com.example.smart_shopping_list_app;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
@@ -16,24 +14,6 @@ import javax.net.ssl.HttpsURLConnection;
 
 class API {
     private static String url = "https://smart-shopping-list-pwr-api.herokuapp.com/";
-
-    private static class PullNewListsUpdate extends AsyncTask {
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            URL httpEndpoint;
-            HttpsURLConnection connection;
-            try {
-                httpEndpoint = new URL(url+ "lists");
-                connection = (HttpsURLConnection) httpEndpoint.openConnection();
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
 
     static class PushNewListsUpdate extends AsyncTask<String, Void, Void> {
 

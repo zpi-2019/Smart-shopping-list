@@ -7,6 +7,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Relation;
@@ -15,6 +16,7 @@ import android.arch.persistence.room.Transaction;
 import android.arch.persistence.room.Update;
 
 //import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /*class Converters {
@@ -333,6 +335,9 @@ class Distance {
 interface DistanceDao {
     @Insert
     void insert(Distance distance);
+
+    @Transaction @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertList(List<Distance> distances);
 
     @Update
     void update(Distance distance);
