@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.TextView;
 import java.util.List;
 import java.util.Objects;
@@ -67,7 +67,7 @@ public class MyListsRecyclerViewAdapter extends RecyclerView.Adapter<MyListsRecy
         int listID;
         ConstraintLayout foreground;
         ConstraintLayout background;
-        ImageButton btDelete;
+        Button btDelete;
 
         ViewHolder(final View view) {
             super(view);

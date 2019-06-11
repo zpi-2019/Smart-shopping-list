@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="androidcolors">
+        <item>@drawable/black_shape</item>
+        <item>@drawable/blue_shape</item>
+        <item>@drawable/green_shape</item>
+        <item>@drawable/yellow_shape</item>
+        <item>@drawable/pink_shape</item>
+        <item>@drawable/white_shape</item>
+    </integer-array>
+
+</resources>

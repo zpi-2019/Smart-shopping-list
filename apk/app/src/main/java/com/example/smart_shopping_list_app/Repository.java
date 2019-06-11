@@ -2,14 +2,13 @@ package com.example.smart_shopping_list_app;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 
 class Repository {
@@ -177,6 +176,33 @@ class Repository {
         protected Void doInBackground(Distance... distances) {
             distanceDao.insert(distances[0]);
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void a) {
+            Log.d("finished", "finished");
+        }
+    }
+
+
+    void insertNewDistancesList(List<Distance> distances) { new InsertNewDistancesListAsync(distanceDao).execute(distances);}
+
+    private static class InsertNewDistancesListAsync extends AsyncTask<List<Distance>, Void, Void> {
+        private DistanceDao distanceDao;
+
+        InsertNewDistancesListAsync(DistanceDao distanceDao) {
+            this.distanceDao = distanceDao;
+        }
+
+        @Override
+        protected Void doInBackground(List<Distance>... distances) {
+            distanceDao.insertList(distances[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void a) {
+            Log.d("finished", "ready");
         }
     }
 

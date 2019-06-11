@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.Objects;
 
@@ -38,7 +39,7 @@ public class AddGroupFragment extends Fragment {
         return view;
     }
 
-    void initButton(View view) {
+    void initButton(final View view) {
         Button btAdd = view.findViewById(R.id.add_group_button_add);
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +53,9 @@ public class AddGroupFragment extends Fragment {
                             .replace(R.id.frame1, nextFrag, "findThisFragment")
                             .addToBackStack(null)
                             .commit();
+                    Toast.makeText(view.getContext(), "Group created. Now you can add items.", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(view.getContext(), "Please enter name of group.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -29,7 +29,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -107,13 +109,13 @@ public class StartActivity extends AppCompatActivity
         } else if (id == R.id.nav_groups) {
             fragmentClass = ListOfGroupsFragment.class;
         } else if (id == R.id.nav_new_list) {
-            fragmentClass = SingleListFragment.class;
+            fragmentClass = AddListFragment.class;
         } else if (id == R.id.nav_settings) {
             fragmentClass = StartFragment.class;
         }
 
         try {
-            fragment = (Fragment) fragmentClass.newInstance();
+            fragment = (Fragment) Objects.requireNonNull(fragmentClass).newInstance();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -154,7 +156,7 @@ public class StartActivity extends AppCompatActivity
                     .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                         public void onComplete(@NonNull Task<GetTokenResult> task) {
                             if (task.isSuccessful()) {
-                                String idToken = task.getResult().getToken();
+                                String idToken = Objects.requireNonNull(task.getResult()).getToken();
                                 Log.d("Token", idToken);
                             }
                         }
@@ -197,12 +199,18 @@ public class StartActivity extends AppCompatActivity
                     }
                     ids.put(helper.keysList.get(i), appViewModel.selectProductID(helper.keysList.get(i)));
                 }
+                List<Distance> list = new ArrayList<>();
+                int counter = 0;
                 for(int i = 0; i < helper.distances.size(); i++){
                     int id1 = ids.get(helper.keysList.get(i));
                     for(int j = 0; j < helper.distances.get(i).size(); j++){
                         int id2 = ids.get(helper.keysList.get(i + j + 1));
-                        appViewModel.insertNewDistance(new Distance(id1, id2, helper.distances.get(i).get(j)));
-                        Log.d("Load", id1 + " " + id2);
+                        list.add(new Distance(id1, id2, helper.distances.get(i).get(j)));
+                        if(counter++ > 10000){
+                            List<Distance> newList = new ArrayList<>(list);
+                            appViewModel.insertNewDistancesList(newList);
+                            counter = 0;
+                        }
                     }
                 }
             } catch (InterruptedException e) {
@@ -214,6 +222,7 @@ public class StartActivity extends AppCompatActivity
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putInt("Model version", MODEL_VERSION);
             editor.apply();
+            Log.d("Update", "finished");
         }
         else{
             Log.d("Model", "No update");
